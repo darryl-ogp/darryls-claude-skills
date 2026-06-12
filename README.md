@@ -24,6 +24,7 @@ All skills are grounded in:
 | [`pm-skill-creator`](skills/pm-skill-creator/SKILL.md) | 🧱 Creates and iterates on PM skills |
 | [`map-user-journey`](skills/map-user-journey/SKILL.md) | 🗺️ Journey maps with Pivotal D&F methodology |
 | [`prepare-workshop`](skills/prepare-workshop/SKILL.md) | 🧑‍🤝‍🧑 Workshop plans using E→O→F facilitation principle |
+| [`plan-my-week`](skills/plan-my-week/SKILL.md) | 📅 Monday-morning weekly plan — 60/40 tactical/strategic, saves to Notion, blocks the calendar |
 
 Full registry with build status: [Notion skills page](https://www.notion.so/opengov/Darryl-s-Claude-Skills-37d77dbba78880c8857afd54daeea0d3)
 
