@@ -48,115 +48,127 @@ Use `grill-me` (sub-routine mode, max 5 questions) to resolve:
 5. **What will this be used for?** Alignment workshop, backlog input,
    stakeholder presentation, research planning?
 
-### Step 2: Build the journey map
+### Step 2: Gather the journey content
 
-Structure each journey as a table with the following rows. Adapt the number
-of stages to fit the journey — don't force it into a fixed template.
+For each stage (4–8 stages, named from the user's perspective — not the
+system's), capture six layers:
 
-#### Journey map structure
+| Layer | Notes |
+|---|---|
+| **Does** | Concrete actions, `[Persona] [verb]…`. |
+| **Thinks** | Mental model, questions, expectations — verbatim-style ("Will this take long?"). |
+| **Feels** | Emotion in plain language + a **1–5 satisfaction score** (1 = very negative, 5 = very positive). The scores drive the emotional curve in the widget. |
+| **Touchpoints** | Channels & systems (web, app, email, paper, MS Teams, HRPS…). |
+| **Backstage** | What happens behind the scenes — other teams, systems, hidden processes. |
+| **Opportunities** | "How might we…" questions. These become roadmap/backlog inputs. |
 
-**Header row — Stages**
-Define 4–8 stages that reflect the user's actual experience, named from
-the user's perspective (not the system's). Examples: "Realises they need X",
-"Finds out about the service", "Completes the form", "Waits for response",
-"Gets the outcome".
+Flag pain points 🔴 and positive moments 🟢 inline.
 
-**Row 1 — What the user does**
-Concrete actions at each stage. Written as `[Persona] [verb]…` statements.
+### Step 3: Render the visual journey map (PRIMARY OUTPUT)
 
-**Row 2 — What the user thinks**
-The user's mental model, questions, or expectations at this stage. Use
-verbatim-style language where possible ("Will this take long?").
+**This is the headline artefact — do not skip it and replace it with a
+markdown table.** The skill's value is the visual.
 
-**Row 3 — What the user feels**
-Emotional state. Use plain language (confused, relieved, frustrated,
-anxious). Flag pain points explicitly with 🔴 and positive moments with 🟢.
+1. First, call `mcp__visualize__read_me` with
+   `modules: ["diagram", "data_viz"]` to fetch the design system tokens
+   (CSS variables, typography, colours). Do this silently.
+2. Then call `mcp__visualize__show_widget` with HTML based on the
+   template at
+   [`references/widget-template.html`](references/widget-template.html).
+   Inline the journey content into the template's placeholders.
+3. Each sticky cell must be ≤12 words. Rich detail goes in the per-stage
+   narrative below (Step 4), not inside the sticky.
+4. The emotional-curve SVG path is generated from the 1–5 scores:
+   `M (i+0.5)*100, 72 - score*10` for each stage `i`. Mark 🔴 pain
+   points and 🟢 high points with the `.pt.pain` / `.pt.joy` classes.
 
-**Row 4 — Touchpoints & channels**
-What the user interacts with: web, app, email, phone, in-person, paper,
-third-party system, etc.
+If `mcp__visualize__show_widget` is not available in the current session
+(e.g. plain Claude Chat without the visualize MCP), say so explicitly and
+fall back to a Mermaid `journey` diagram in a code block. Do **not**
+silently revert to a text table.
 
-**Row 5 — Backstage / system**
-What happens behind the scenes that the user doesn't see but that affects
-their experience. Include other teams, systems, or processes.
+### Step 4: Per-stage narrative (documentation handoff)
 
-**Row 6 — Opportunities**
-Problems to solve or improvements to make at this stage. Written as
-`How might we…` questions. These become inputs to the product roadmap
-and backlog.
+Below the widget, write the detailed narrative — one block per stage,
+using emoji numbering (1️⃣, 2️⃣, 3️⃣ …). For each stage, expand on the
+sticky-note content using these labels:
 
-#### Format
+- **Does:** concrete actions, 1–2 sentences
+- **Thinks:** verbatim-style quote
+- **Feels:** plain language + 🔴 or 🟢 marker
+- **Touchpoints:** comma-separated list
+- **Backstage:** 1–2 sentences on the hidden machinery
+- 🟢 **What works** (optional, only if there's a genuine positive)
+- **Opportunities:** one or more `How might we…?` questions
 
-Render as a markdown table if straightforward, or as a structured list of
-stages with sub-sections if the journey is complex. Always include a brief
-narrative intro (2–3 sentences) describing the persona and scope.
+The widget is for alignment; the narrative is the durable record.
 
-### Step 3: Annotate key insights
+### Step 5: Annotate key insights
 
-After the map, add a section called **Key insights** with:
+After the narrative, add a **Key insights** section:
 
-- The **top 3 pain points** (ranked by severity and frequency)
-- The **most critical moment** in the journey — the point where the
-  experience most determines whether the user succeeds or fails
-- **Assumptions being made** — flag anything in the map that is hypothetical
-  and needs validation through research
+- **Top 3 pain points** ranked by severity and frequency
+- **Most critical moment** — the stage where the experience most
+  determines whether the user succeeds or fails
+- **Assumptions being made** — flag anything hypothetical and needing
+  validation
 - **Research gaps** — questions the map raises that we can't answer yet
 
-### Step 4: Link to next steps
+### Step 6: Link to next steps
 
-Depending on the stated purpose (Step 1, question 5), suggest:
+Based on the stated purpose (Step 1, question 5), suggest:
 
-- If **research planning**: which stages have the most unknowns and should
-  be prioritised for exploratory interviews
-- If **backlog input**: which opportunities map to existing or new backlog
-  items; flag any that should go through D&F before being built
-- If **stakeholder alignment**: which pain points are most important to
-  surface in the next product-focused conversation
-- If **workshop prep**: pass to `prepare-workshop` to design a session
-  around the journey map
+- **Research planning** → which stages have the most unknowns; prioritise
+  for exploratory interviews
+- **Backlog input** → which opportunities map to existing or new items;
+  flag any needing D&F before build
+- **Stakeholder alignment** → which pain points to surface in the next
+  product conversation
+- **Workshop prep** → pass to `prepare-workshop` to design a session
+  around the map
+
+### Step 7: Offer to push to Miro
+
+End with: *"Want me to push this to Miro so the team can collaborate on
+it?"*
+
+If Darryl says yes, invoke the `miro:miro-table` skill (or
+`miro:miro-diagram` if the journey is more flow-shaped) to recreate the
+map on a Miro board — stages as column frames, each cell as a sticky
+note, emotional curve as a connector line. Return the board URL.
+
+If the Miro MCP isn't connected in this session, say so plainly and stop
+— don't fall back to copy/paste instructions for the user to do it
+manually.
 
 ---
 
 ## Output format
 
+The response follows this order, top to bottom:
+
 ```
-## User journey: [Persona] — [Scope] ([Current/Future state])
-
-[2–3 sentence narrative: who this is, what the journey covers, and why
-we're mapping it]
-
-### Journey map
-
-[Table or structured stages]
-
-### Key insights
-
-**Top pain points**
-1. …
-2. …
-3. …
-
-**Most critical moment**
-[Stage name]: [Why it matters]
-
-**Assumptions requiring validation**
-- …
-
-**Research gaps**
-- …
-
-### Suggested next steps
-[Contextual recommendations based on stated purpose]
+[1] Inline visual journey-map widget         ← rendered via show_widget
+[2] Per-stage narrative                       ← 1️⃣ 2️⃣ 3️⃣ … with Does/Thinks/Feels/Touchpoints/Backstage/Opportunities
+[3] ### Key insights                          ← top pain points, critical moment, assumptions, research gaps
+[4] ### Suggested next steps                  ← keyed to the stated purpose
+[5] "Want me to push this to Miro?"           ← upgrade offer
 ```
+
+The widget is the headline. The narrative below is the durable record.
+Don't skip the widget and lead with text — that's the failure mode this
+skill exists to fix.
 
 ---
 
 ## Quality checklist
 
-Before delivering the output, verify:
+Before delivering, verify:
 
-- [ ] The map is written from the user's perspective, not the system's
-- [ ] Pain points (🔴) and positive moments (🟢) are clearly marked
-- [ ] Opportunities are framed as "How might we…" questions
+- [ ] The visual widget was rendered first (not a markdown table)
+- [ ] Each sticky cell is ≤12 words; richer detail is in the narrative below
+- [ ] The emotional curve reflects 1–5 satisfaction scores; pain points and joys are marked with `.pt.pain` / `.pt.joy`
+- [ ] Stages are named from the user's perspective, not the system's
+- [ ] Opportunities are framed as `How might we…?`
 - [ ] Assumptions are separated from research-backed observations
-- [ ] The output has a clear next step or action
+- [ ] Response ends with the Miro offer (or a plain note that the Miro MCP isn't connected)
