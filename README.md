@@ -29,11 +29,23 @@ Full registry with build status: [Notion skills page](https://www.notion.so/open
 
 ## How to install
 
+### Claude Code (any machine)
+
+Clone the repo, then run the install script:
+
+```bash
+git clone <repo-url> ~/Documents/projects/darryls-claude-skills
+cd ~/Documents/projects/darryls-claude-skills
+./scripts/install.sh
+```
+
+The script symlinks each `skills/*` folder into `~/.claude/skills/`. It's
+idempotent — re-run it anytime, and after `git pull` to pick up new skills.
+Pass `--force` to replace an existing symlink that points elsewhere
+(it refuses to delete real folders).
+
 ### Claude Chat / Cowork
 Copy skill folders to `/mnt/skills/user/[skill-name]/` on your Cowork instance.
-
-### Claude Code
-Add to `~/.claude/skills/` (global) or `.claude/skills/` (project-level).
 
 ## How to create a new skill
 
