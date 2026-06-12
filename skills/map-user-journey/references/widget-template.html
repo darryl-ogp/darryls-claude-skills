@@ -1,180 +1,225 @@
 <!--
-Widget template for the map-user-journey skill.
+Widget template for the map-user-journey skill (flowchart-card layout).
 
-Use with mcp__visualize__show_widget. Before the first call, fetch the
-design system tokens via mcp__visualize__read_me with modules:
-['diagram', 'data_viz'].
+Use with mcp__visualize__show_widget. Before the first call, fetch
+design tokens via mcp__visualize__read_me with modules: ['diagram',
+'data_viz'].
+
+Layout shape: one card per stage, arranged left-to-right with arrows
+between them, emotional curve along the top. ALL non-headline detail
+(thinks / touchpoints / backstage / opportunities) lives in the
+per-stage narrative BELOW the widget, not inside the cards.
+
+Each card holds only:
+  - stage number + stage name (user's-perspective verb phrase)
+  - dominant emotion + 🔴/🟢 marker
+  - one-line summary of what the user does (≤14 words)
 
 Adapt the placeholders:
   {{Persona}} {{Scope}} {{State}}   — header
-  {{LEAD}}                          — 2-line intro under the title
-  {{N}}                             — number of stages (4–8)
-  {{STAGE_NAMES}}                   — array of stage labels
-  {{SCORES}}                        — array of 1–5 satisfaction scores per stage
-  {{ROWS.does/thinks/feels/touchpoints/backstage/opportunities}} — per-stage cells
+  {{LEAD}}                          — 1–2 sentence intro
+  {{N}}                             — number of stages (aim for 5–6, max 7)
+  {{STAGES}}                        — per-stage data (name, score, feels, does, mood)
 
-The emotional-curve SVG path is generated from {{SCORES}}:
-  for stage i (0..N-1):
-    x = (i + 0.5) * 100
-    y = 60 - score * 10        // score 1 → y=50, score 5 → y=10
-
-Cells should be ≤12 words. Rich detail belongs in the narrative BELOW
-the widget, not inside the sticky notes.
+Stage centres in the emotional-curve SVG:
+  x = (i + 0.5) * 100 / N      (percent within viewBox 0..100)
+  y = 70 - score * 12          (score 1 → y=58, score 5 → y=10)
 -->
 
 <style>
-  .jm {
-    --num-stages: 5;
-    --row-label-w: 130px;
-    display: grid;
-    grid-template-columns: var(--row-label-w) repeat(var(--num-stages), minmax(140px, 1fr));
-    gap: 6px;
+  .jm-wrap {
     padding: 8px 4px 16px;
-    color: var(--text-primary, #1f1f1f);
+    color: var(--text-primary, #f5f5f5);
     font-family: var(--font-sans, ui-sans-serif, system-ui, -apple-system, sans-serif);
   }
-  .jm-title { font-weight: 700; font-size: 17px; margin: 0 0 2px; }
-  .jm-subtitle { color: var(--text-secondary, #666); font-size: 13px; margin: 0 0 14px; line-height: 1.4; }
-  .jm-curve { grid-column: 2 / -1; height: 72px; position: relative; }
-  .jm-curve svg { width: 100%; height: 100%; display: block; overflow: visible; }
-  .jm-curve .grid { stroke: var(--border, #e3e3dc); stroke-width: 1; stroke-dasharray: 2 4; }
-  .jm-curve .axis-label { fill: var(--text-tertiary, #999); font-size: 9px; font-family: inherit; }
-  .jm-curve .curve { stroke: var(--accent, #d24545); stroke-width: 2.5; fill: none; }
-  .jm-curve .pt { stroke: #fff; stroke-width: 2; }
-  .jm-curve .pt.neutral { fill: var(--accent, #d24545); }
-  .jm-curve .pt.pain    { fill: #c0392b; }
-  .jm-curve .pt.joy     { fill: #1b8a3b; }
-  .jm-stage-header {
-    background: var(--surface-elevated, #f5f5f0);
-    padding: 10px 8px;
-    border-radius: 8px;
-    border: 1px solid var(--border, #e3e3dc);
+  .jm-title    { font-weight: 700; font-size: 17px; margin: 0 0 2px; }
+  .jm-subtitle { color: var(--text-secondary, #aaa); font-size: 13px; margin: 0 0 14px; line-height: 1.4; }
+
+  .jm-scroll {
+    overflow-x: auto;
+    overflow-y: visible;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .jm-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--N, 5), minmax(150px, 1fr));
+    column-gap: 28px;     /* room for the → arrow between cards */
+    row-gap: 8px;
+    min-width: calc(var(--N, 5) * 160px);
+    position: relative;
+  }
+
+  /* Emotional curve spans the full row above the cards */
+  .jm-curve-cell {
+    grid-column: 1 / -1;
+    height: 72px;
+    position: relative;
+  }
+  .jm-curve-cell svg {
+    width: 100%; height: 100%; display: block; overflow: visible;
+  }
+  .jm-curve-grid { stroke: var(--border, #444); stroke-width: 1; stroke-dasharray: 2 4; }
+  .jm-curve-axis { fill: var(--text-tertiary, #888); font-size: 9px; font-family: inherit; }
+  .jm-curve-line { stroke: var(--accent, #d24545); stroke-width: 2.5; fill: none; }
+  .jm-curve-pt   { stroke: var(--background, #111); stroke-width: 2; }
+  .jm-curve-pt.neutral { fill: var(--accent, #d24545); }
+  .jm-curve-pt.pain    { fill: #c0392b; }
+  .jm-curve-pt.joy     { fill: #1b8a3b; }
+
+  /* Stage cards */
+  .jm-card {
+    background: var(--surface-elevated, #1f1f1f);
+    border: 1.5px solid var(--border, #444);
+    border-radius: 10px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    min-height: 130px;
+  }
+  .jm-card.pain { border-color: #c0392b; }
+  .jm-card.joy  { border-color: #1b8a3b; }
+
+  /* Arrow between cards (pseudo-element on every card except last) */
+  .jm-card:not(:last-of-type)::after {
+    content: '→';
+    position: absolute;
+    right: -22px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 22px;
+    color: var(--text-tertiary, #888);
+    pointer-events: none;
+  }
+
+  .jm-stage-num {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-tertiary, #888);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .jm-stage-name {
     font-weight: 600;
-    text-align: center;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 1.3;
   }
-  .jm-row-label {
-    align-self: center;
-    text-align: right;
-    padding: 8px 4px;
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--text-secondary, #555);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+  .jm-stage-feels {
+    font-size: 12px;
+    line-height: 1.3;
+    display: flex;
+    align-items: center;
+    gap: 5px;
   }
-  .jm-sticky {
-    padding: 9px 10px;
-    border-radius: 6px;
+  .jm-stage-feels.pain { color: #e07c75; }
+  .jm-stage-feels.joy  { color: #69c987; }
+  .jm-stage-does {
     font-size: 12px;
     line-height: 1.4;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.07);
-    transform: rotate(-0.3deg);
-    min-height: 44px;
+    color: var(--text-secondary, #ccc);
+    margin-top: auto;
   }
-  .jm-sticky:nth-child(odd) { transform: rotate(0.4deg); }
-  .jm-sticky.does          { background: #fff4b3; }
-  .jm-sticky.thinks        { background: #e8d8ff; font-style: italic; }
-  .jm-sticky.feels         { background: #ffd5d0; }
-  .jm-sticky.touchpoints   { background: #cfe6ff; }
-  .jm-sticky.backstage     { background: #ebebe2; color: #555; font-size: 11px; }
-  .jm-sticky.opportunities { background: #d6f0c4; }
-  .jm-marker {
-    display: inline-block;
-    margin-right: 4px;
-    font-weight: 700;
-  }
-  .jm-pain { color: #c0392b; }
-  .jm-joy  { color: #1b8a3b; }
 </style>
 
-<h2 class="jm-title">{{Persona}} — {{Scope}} ({{State}})</h2>
-<p class="jm-subtitle">{{LEAD: 1–2 sentences describing who this map is for, what it covers, and why we’re mapping it.}}</p>
+<div class="jm-wrap">
+  <h2 class="jm-title">{{Persona}} — {{Scope}} ({{State}})</h2>
+  <p class="jm-subtitle">{{LEAD}}</p>
 
-<div class="jm" style="--num-stages: {{N}}">
+  <div class="jm-scroll">
+    <div class="jm-grid" style="--N: {{N}}">
 
-  <!-- Row 1: emotional curve overlay -->
-  <div></div>
-  <div class="jm-curve">
-    <svg viewBox="0 0 {{N*100}} 72" preserveAspectRatio="none">
-      <!-- horizontal reference grid at scores 1 / 3 / 5 -->
-      <line x1="0" y1="62" x2="{{N*100}}" y2="62" class="grid"/>
-      <line x1="0" y1="42" x2="{{N*100}}" y2="42" class="grid"/>
-      <line x1="0" y1="22" x2="{{N*100}}" y2="22" class="grid"/>
-      <text x="2" y="64" class="axis-label">low</text>
-      <text x="2" y="24" class="axis-label">high</text>
+      <!-- Emotional curve -->
+      <div class="jm-curve-cell">
+        <svg viewBox="0 0 100 72" preserveAspectRatio="none">
+          <line x1="0" y1="58" x2="100" y2="58" class="jm-curve-grid"/>
+          <line x1="0" y1="34" x2="100" y2="34" class="jm-curve-grid"/>
+          <line x1="0" y1="10" x2="100" y2="10" class="jm-curve-grid"/>
+          <text x="0.5" y="60" class="jm-curve-axis">low</text>
+          <text x="0.5" y="12" class="jm-curve-axis">high</text>
+          <!-- path: M (i+0.5)*100/N, 70-score*12 ... -->
+          <path d="{{PATH}}" class="jm-curve-line" vector-effect="non-scaling-stroke"/>
+          {{POINTS — repeat: <circle cx="(i+0.5)*100/N" cy="70-score*12" r="2.4" class="jm-curve-pt {{pain|joy|neutral}}" vector-effect="non-scaling-stroke"/>}}
+        </svg>
+      </div>
 
-      <!-- curve path: M (i+0.5)*100, 72-score*10 -->
-      <path d="{{PATH}}" class="curve"/>
+      <!-- Stage cards (one per stage) -->
+      {{For each stage i:}}
+      <div class="jm-card {{pain|joy|}}">
+        <div class="jm-stage-num">Stage {{i+1}}</div>
+        <div class="jm-stage-name">{{Stage name}}</div>
+        <div class="jm-stage-feels {{pain|joy|}}">{{🔴|🟢|·}} {{Feels label, 2–5 words}}</div>
+        <div class="jm-stage-does">{{Does — ≤14 words}}</div>
+      </div>
+      {{End}}
 
-      <!-- per-stage points: cx=(i+0.5)*100, cy=72-score*10, class=pain|joy|neutral -->
-      {{POINTS}}
-    </svg>
+    </div>
   </div>
-
-  <!-- Row 2: stage headers -->
-  <div></div>
-  {{STAGE_HEADERS — repeat: <div class="jm-stage-header">N. Stage name</div>}}
-
-  <!-- Row 3: Does -->
-  <div class="jm-row-label">Does</div>
-  {{ROW_DOES — repeat: <div class="jm-sticky does">≤12 words</div>}}
-
-  <!-- Row 4: Thinks -->
-  <div class="jm-row-label">Thinks</div>
-  {{ROW_THINKS — repeat: <div class="jm-sticky thinks">"verbatim-style quote"</div>}}
-
-  <!-- Row 5: Feels -->
-  <div class="jm-row-label">Feels</div>
-  {{ROW_FEELS — repeat: <div class="jm-sticky feels"><span class="jm-marker jm-pain">🔴</span>label</div>}}
-
-  <!-- Row 6: Touchpoints -->
-  <div class="jm-row-label">Touchpoints</div>
-  {{ROW_TOUCHPOINTS — repeat: <div class="jm-sticky touchpoints">channel, system</div>}}
-
-  <!-- Row 7: Backstage -->
-  <div class="jm-row-label">Backstage</div>
-  {{ROW_BACKSTAGE — repeat: <div class="jm-sticky backstage">behind-the-scenes fact</div>}}
-
-  <!-- Row 8: Opportunities -->
-  <div class="jm-row-label">Opportunities</div>
-  {{ROW_OPPORTUNITIES — repeat: <div class="jm-sticky opportunities">HMW …?</div>}}
-
 </div>
 
 <!--
-EXAMPLE — 5-stage journey, scores [2,3,2,4,3]
+EXAMPLE — 5-stage journey, scores [4, 2, 2, 3, 2]:
 
-<div class="jm" style="--num-stages: 5">
-  <div></div>
-  <div class="jm-curve">
-    <svg viewBox="0 0 500 72" preserveAspectRatio="none">
-      <line x1="0" y1="62" x2="500" y2="62" class="grid"/>
-      <line x1="0" y1="42" x2="500" y2="42" class="grid"/>
-      <line x1="0" y1="22" x2="500" y2="22" class="grid"/>
-      <text x="2" y="64" class="axis-label">low</text>
-      <text x="2" y="24" class="axis-label">high</text>
-      <path d="M50,52 L150,42 L250,52 L350,32 L450,42" class="curve"/>
-      <circle cx="50"  cy="52" r="5" class="pt pain"/>
-      <circle cx="150" cy="42" r="5" class="pt neutral"/>
-      <circle cx="250" cy="52" r="5" class="pt pain"/>
-      <circle cx="350" cy="32" r="5" class="pt joy"/>
-      <circle cx="450" cy="42" r="5" class="pt neutral"/>
-    </svg>
+<div class="jm-wrap">
+  <h2 class="jm-title">MDDI HR Recruiter — End-to-end hiring (current state)</h2>
+  <p class="jm-subtitle">Current-state map of how an MDDI recruiter takes a role from intake to onboarded hire today.</p>
+
+  <div class="jm-scroll">
+    <div class="jm-grid" style="--N: 5">
+
+      <div class="jm-curve-cell">
+        <svg viewBox="0 0 100 72" preserveAspectRatio="none">
+          <line x1="0" y1="58" x2="100" y2="58" class="jm-curve-grid"/>
+          <line x1="0" y1="34" x2="100" y2="34" class="jm-curve-grid"/>
+          <line x1="0" y1="10" x2="100" y2="10" class="jm-curve-grid"/>
+          <text x="0.5" y="60" class="jm-curve-axis">low</text>
+          <text x="0.5" y="12" class="jm-curve-axis">high</text>
+          <path d="M10,22 L30,46 L50,46 L70,34 L90,46" class="jm-curve-line" vector-effect="non-scaling-stroke"/>
+          <circle cx="10" cy="22" r="2.4" class="jm-curve-pt joy"     vector-effect="non-scaling-stroke"/>
+          <circle cx="30" cy="46" r="2.4" class="jm-curve-pt pain"    vector-effect="non-scaling-stroke"/>
+          <circle cx="50" cy="46" r="2.4" class="jm-curve-pt pain"    vector-effect="non-scaling-stroke"/>
+          <circle cx="70" cy="34" r="2.4" class="jm-curve-pt neutral" vector-effect="non-scaling-stroke"/>
+          <circle cx="90" cy="46" r="2.4" class="jm-curve-pt pain"    vector-effect="non-scaling-stroke"/>
+        </svg>
+      </div>
+
+      <div class="jm-card joy">
+        <div class="jm-stage-num">Stage 1</div>
+        <div class="jm-stage-name">Take the brief</div>
+        <div class="jm-stage-feels joy">🟢 In control</div>
+        <div class="jm-stage-does">Receives Word doc from HM, clarifies, assigns assistant.</div>
+      </div>
+
+      <div class="jm-card pain">
+        <div class="jm-stage-num">Stage 2</div>
+        <div class="jm-stage-name">Post the job</div>
+        <div class="jm-stage-feels pain">🔴 Drained by form-filling</div>
+        <div class="jm-stage-does">Creates HRPS requisition, dual-posts to MyCareersFuture.</div>
+      </div>
+
+      <div class="jm-card pain">
+        <div class="jm-stage-num">Stage 3</div>
+        <div class="jm-stage-name">Wait &amp; sift CVs</div>
+        <div class="jm-stage-feels pain">🔴 Buried, 1–5 min/CV</div>
+        <div class="jm-stage-does">Waits 2 weeks, bulk-downloads zip, reads each CV.</div>
+      </div>
+
+      <div class="jm-card">
+        <div class="jm-stage-num">Stage 4</div>
+        <div class="jm-stage-name">Shortlist with HM</div>
+        <div class="jm-stage-feels">· Workaround holds, but fragile</div>
+        <div class="jm-stage-does">Sends &lt;10 CVs + write-up to HM by email.</div>
+      </div>
+
+      <div class="jm-card pain">
+        <div class="jm-stage-num">Stage 5</div>
+        <div class="jm-stage-name">Pre-offer</div>
+        <div class="jm-stage-feels pain">🔴 Juggling disconnected systems</div>
+        <div class="jm-stage-does">Triggers G50, salary calc, conditional offer.</div>
+      </div>
+
+    </div>
   </div>
-  <div></div>
-  <div class="jm-stage-header">1. Get hiring need</div>
-  <div class="jm-stage-header">2. Post job</div>
-  <div class="jm-stage-header">3. Shortlist</div>
-  <div class="jm-stage-header">4. Interview &amp; offer</div>
-  <div class="jm-stage-header">5. Onboarding</div>
-  <div class="jm-row-label">Does</div>
-  <div class="jm-sticky does">Receives Word doc from HM, assigns ABP</div>
-  <div class="jm-sticky does">ABP posts to HRPS, then C@G</div>
-  <div class="jm-sticky does">Manually filters CVs in spreadsheet</div>
-  <div class="jm-sticky does">Coordinates panel, writes offer letter</div>
-  <div class="jm-sticky does">Hands off to onboarding team</div>
-  …
 </div>
 -->
