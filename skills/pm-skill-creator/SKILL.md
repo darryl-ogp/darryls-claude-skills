@@ -112,21 +112,60 @@ Before presenting the draft, check:
 - [ ] Is the description trigger-rich enough?
 - [ ] Is the skill body concise enough to not waste context window?
 
-### Step 5: Deliver and update
+### Step 5: Deliver, install, commit
 
-1. **Write the SKILL.md to the repo:**
-   `/Users/darryl/Documents/projects/darryls-claude-skills/skills/[skill-name]/SKILL.md`
-2. The skill is already installed locally — the repo's `skills/` folder is
-   symlinked into `~/.claude/skills/`, so the new skill is live as soon as
-   the file is saved.
-3. For Claude Chat / Cowork, the same file needs to be uploaded to
-   `/mnt/skills/user/[skill-name]/SKILL.md` separately.
-4. Commit to the GitHub repo (the working directory is a git repo).
-5. Offer to update the Notion skills registry at
-   `https://www.notion.so/opengov/Darryl-s-Claude-Skills-37d77dbba78880c8857afd54daeea0d3`
-   — either via the Notion MCP or by drafting a row Darryl can paste.
-6. Update the in-repo `README.md` skills table and `CLAUDE.md` backlog
-   (mark the skill ✅ done) in the same commit.
+Each new skill needs to land in **four places** to be fully wired up.
+Execute these in order — do not skip and do not batch into a vague
+"and now save the file" instruction.
+
+**5a. Write SKILL.md to the repo**
+
+```
+/Users/darryl/Documents/projects/darryls-claude-skills/skills/[skill-name]/SKILL.md
+```
+
+**5b. Create the local symlink so the skill is live in Claude Code**
+
+Each skill is symlinked individually — the repo's `skills/` folder is NOT
+a top-level symlink. Run:
+
+```bash
+ln -s /Users/darryl/Documents/projects/darryls-claude-skills/skills/[skill-name] \
+      /Users/darryl/.claude/skills/[skill-name]
+```
+
+After this, the new skill is loaded into every new Claude Code session
+automatically.
+
+**5c. Update the in-repo index**
+
+In the same change:
+- Add a row to `README.md`'s skills table
+- Tick the skill ✅ in `CLAUDE.md`'s backlog
+
+**5d. Commit**
+
+```bash
+git add skills/[skill-name] README.md CLAUDE.md
+git commit -m "Add [skill-name] skill"
+```
+
+Do **not** push automatically. Tell Darryl: *"committed locally — want me
+to push?"*. Only push if he confirms and a remote exists.
+
+**5e. Update the Notion registry**
+
+Use the Notion MCP to add a row to the relevant table on the registry
+page (https://www.notion.so/opengov/Darryl-s-Claude-Skills-37d77dbba78880c8857afd54daeea0d3),
+or — if MCP access fails — draft the row in markdown for Darryl to paste.
+The tables currently have three columns: Skill / Purpose / Status.
+
+**5f. (Manual, Darryl's call) Claude Chat / Cowork**
+
+If Darryl wants the skill in Claude Chat too, the same SKILL.md file
+needs to be uploaded to `/mnt/skills/user/[skill-name]/SKILL.md`
+separately. Don't try to do this from Claude Code — surface the
+reminder instead.
 
 ---
 
