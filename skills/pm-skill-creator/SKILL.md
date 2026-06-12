@@ -188,5 +188,23 @@ If Darryl wants to update a skill:
 1. Read the current SKILL.md
 2. Understand what's wrong or missing (use grill-me if needed)
 3. Edit the specific sections — don't rewrite what isn't broken
-4. Re-run the Step 4 checklist
+4. Re-run the Step 4 checklist from above (pm-principles alignment,
+   description trigger-richness, etc.)
 5. Present a diff-style summary of what changed and why
+6. **Commit + ask to push** — same as Step 5d above. Run:
+
+   ```bash
+   git add skills/[skill-name]/SKILL.md
+   git commit -m "[skill-name]: <short description of the change>"
+   ```
+
+   Then ask Darryl: *"committed locally — want me to push?"*. If yes,
+   run `git push`.
+
+7. **Update the Notion registry** if the change affects what the skill
+   does or its status — same as Step 5e above. Trivial wording
+   tweaks don't need a Notion update; behavioural or scope changes
+   do.
+
+No symlink step is needed on updates — the symlink already points at
+the repo, so the edit is live in the next Claude Code session.
