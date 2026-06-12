@@ -6,10 +6,13 @@ description: >
   workshop", "facilitate a session", "run a session on X", "we need a
   workshop to align on X", "help me plan a retro", "inception", "kickoff",
   "design studio", "prioritisation session", "assumptions workshop",
-  "discovery workshop", or any similar request to structure a collaborative
-  group activity with a goal. Composes with grill-me (to clarify goals and
-  constraints), pm-principles (for activity selection and facilitation
-  principles), and my-voice (for participant-facing materials).
+  "discovery workshop", "make this workshop fun", "engaging workshop",
+  "energetic session", or any similar request to structure a collaborative
+  group activity with a goal. Designs for energy, variety, and
+  psychological safety — never death-by-sticky-note. ALWAYS runs the
+  full output through my-voice before delivering. Composes with grill-me
+  (to clarify goals and constraints) and pm-principles (for activity
+  selection and facilitation principles).
 ---
 
 # Prepare Workshop
@@ -49,6 +52,44 @@ fail to produce a decision. Design every activity against this arc.
 
 ---
 
+## Design for energy and engagement
+
+A workshop that drags is a workshop that fails — even if the activities are
+technically correct. Apply these rules alongside E→O→F. Every plan this
+skill produces must reflect them.
+
+- **Vary the modality every 15–25 minutes.** Silent solo work → paired
+  discussion → small group → whole group → back to solo. Static formats
+  (one person talking for 30+ min) kill momentum.
+- **Open with a warm-up that does double duty.** Skip generic icebreakers;
+  pick a 5-minute activity that also surfaces something useful — e.g.
+  Hopes & Concerns, "one recent customer moment that surprised you", or
+  a 60-second stand-up round.
+- **Visible timeboxes.** Put a 5–8 minute timer on screen for every
+  divergent activity. Urgency beats overthinking; shared timing signals
+  respect for everyone's time.
+- **Tactile in person, playful remote.** Real sticky notes + markers
+  beat anything digital when you're in a room. On Miro, use stamps,
+  emoji reactions, and cursors so people stay present. Avoid
+  Zoom-window-with-Google-Doc — that produces meetings, not workshops.
+- **Plan the energy curve, not just the clock.** Front-load creative
+  divergence when people are fresh. Save convergence and decisions for
+  the second half. End on something generative (next steps,
+  appreciations) so people leave with momentum, not fatigue. Break
+  every 60–90 minutes.
+- **Ground rules in the first 10 minutes.** "No idea is stupid", "build
+  on each other", "yes-and over yes-but". Especially with mixed
+  seniority — this is the single biggest unlock for the next two hours.
+- **Lightness in language.** Brief participants like a human, not a
+  facilitation manual. Name activities with verbs ("Map your
+  assumptions", not "Assumption Mapping Exercise"). Humour where it
+  lands — never at anyone's expense.
+- **End on a high.** A 5-minute closing round — one word on how you're
+  leaving, or one thing you'll do next — makes the workshop feel
+  finished, not just over.
+
+---
+
 ## Workflow
 
 ### Step 1: Clarify goals and constraints
@@ -70,7 +111,9 @@ Use `grill-me` (sub-routine mode, max 6 questions) to resolve:
 ### Step 2: Select activities
 
 Based on the goal, select activities from the Pivotal Labs playbook. Match
-each to the E→O→F arc.
+each to the E→O→F arc, *and* against the energy/engagement rules above —
+don't string together three sticky-note exercises in a row, even if each
+is individually correct.
 
 #### Activity menu
 
@@ -143,14 +186,27 @@ Standard time allocations:
 
 ### Step 4: Produce the workshop plan
 
-Deliver a complete plan with:
+Build a complete plan with:
 
 1. **Session brief** (what to share with participants in advance)
 2. **Facilitator guide** (agenda + facilitation notes)
 3. **Materials checklist** (what to prepare)
 4. **Likely failure modes** (what to watch for and how to recover)
 
-Apply `my-voice` to any participant-facing text.
+### Step 5: Run the full output through my-voice — mandatory
+
+**Never skip this step.** Before delivering the plan to Darryl, invoke
+the `my-voice` skill over the complete output: session brief, opening
+script, ground rules, every activity introduction, closing script, the
+materials checklist if it has prose, the failure-modes table commentary.
+
+Without my-voice, the participant-facing text reads like every other
+corporate workshop brief — exactly what makes participants disengage in
+the first 90 seconds. The energy/engagement design above only works if
+the language carries it.
+
+Pass straight through `my-voice` as the final step — do not edit by hand
+after.
 
 ---
 
@@ -211,6 +267,12 @@ Apply `my-voice` to any participant-facing text.
 
 - [ ] The goal is specific enough that we'll know at the end if we achieved it
 - [ ] The agenda follows E→O→F — no activity is missing a convergence step
-- [ ] There are explicit next steps at the end with owners
-- [ ] Remote/async constraints are accounted for if applicable
-- [ ] Participant-facing text has been passed through my-voice
+- [ ] Modality changes at least every 25 minutes (no three-stickies-in-a-row)
+- [ ] A warm-up that does double duty opens the session
+- [ ] Visible timeboxes set for every divergent activity
+- [ ] Ground rules / psychological-safety frame set in the first 10 minutes
+- [ ] Energy curve planned — divergence early, convergence later, generative close
+- [ ] Break every 60–90 minutes for sessions longer than 90 minutes
+- [ ] Explicit next steps with owners at the end
+- [ ] Remote/async constraints accounted for if applicable
+- [ ] **Full output passed through my-voice as the final step** (mandatory, not optional)
