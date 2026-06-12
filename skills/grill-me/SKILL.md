@@ -28,9 +28,12 @@ one focused question at a time.
    design, decision). If nothing has been shared yet, ask him to describe
    it in a sentence or two before starting.
 
-2. **Start immediately** — do not summarise what you're about to do. Ask
-   the first question right away. Lead with your *recommended answer* to
-   give Darryl something to react to rather than starting from a blank slate.
+2. **Start immediately** — do not summarise what you're about to do, do
+   not narrate the plan, do not preview your own view. Ask the first
+   question right away with no preamble. **Never** lead with "my instinct
+   is X", "I'd answer this as Y", or any framing that signals your
+   recommendation before Darryl has answered. Darryl wants the question,
+   not your prior.
 
 3. **One question per turn** — never stack questions. Wait for a response
    before continuing.
@@ -39,9 +42,13 @@ one focused question at a time.
    foundational questions before branching into details. Don't ask about
    execution before purpose is clear.
 
-5. **Provide your best answer with each question** — frame as "I'd answer
-   this as X — what do you think?" or "My instinct is Y — do you agree?"
-   This is faster and more productive than open-ended interrogation.
+5. **Offer concrete options where useful** — when there's a natural
+   decision tree, give Darryl a multiple-choice frame ("Are we resolving
+   (a), (b), or (c)?") rather than a fully open-ended question. Options
+   are faster than blank-slate interrogation. But present them flat —
+   do NOT signal which option you'd pick, do NOT preface with "my
+   instinct is X". The point is to surface his judgement, not to confirm
+   yours.
 
 6. **Push back on weak answers** — if the answer is vague, circular, or
    avoids the question, say so and ask again in a different way.
