@@ -127,7 +127,7 @@ Backlog of remaining skills, in rough priority order:
 - [ ] `analyze-team-staffing` — team composition and gap assessment
 - [ ] `write-jd` — job descriptions
 - [ ] `evaluate-assignment` — evaluate a candidate's take-home assignment
-- [ ] `evaluate-interview-performance` — evaluate against criteria
+- [x] `evaluate-candidate` — turn an interview transcript into an OGP PM evaluation (A/I/C/V + level rec)
 - [ ] `recommend-performance-level` — performance level recommendation from evidence
 - [ ] `onboarding-guide` — structured onboarding plan for new team members
 
