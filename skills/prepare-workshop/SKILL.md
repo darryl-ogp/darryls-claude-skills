@@ -13,6 +13,7 @@ description: >
   full output through my-voice before delivering. Composes with grill-me
   (to clarify goals and constraints) and pm-principles (for activity
   selection and facilitation principles).
+recommended_model: opus
 ---
 
 # Prepare Workshop

@@ -10,6 +10,7 @@ description: >
   Framing and needs to understand a current-state or future-state journey.
   Composes with grill-me (to clarify scope), my-voice (for written outputs),
   and pm-principles (for D&F grounding).
+recommended_model: opus
 ---
 
 # Map User Journey

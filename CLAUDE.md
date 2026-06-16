@@ -64,6 +64,19 @@ Critical rules encoded there:
 
 ---
 
+## Skill model routing
+
+Some skills declare `recommended_model: opus|sonnet|haiku` in their YAML frontmatter when the work materially benefits from a specific tier (heavy reasoning, multi-source synthesis, relentless interviewing). Most skills don't declare one and run on the session default.
+
+Before executing any skill:
+- No `recommended_model`, or it matches the session model → proceed silently.
+- Differs from the session model → surface one line, then proceed:
+  > ⚠️ This skill recommends **{model}**. Switch with `/model {model}` (applies next turn) or restart with `claude --model {model}` for a clean session. Continuing on {current} unless you stop me.
+
+Use tier names (`opus` / `sonnet` / `haiku`), not specific model IDs — keeps the frontmatter from going stale when new versions ship. Add the field only when a smaller model would materially degrade output; sub-routine skills (called by other skills) inherit the parent's model and don't need it.
+
+---
+
 ## Skill format
 
 ```yaml

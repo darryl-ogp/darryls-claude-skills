@@ -13,6 +13,7 @@ description: >
   to clarify intent when inputs are ambiguous, and produces a complete
   SKILL.md ready to commit to the repo and register in Notion. This is the
   factory skill — prefer it over hand-writing a SKILL.md from scratch.
+recommended_model: opus
 ---
 
 # PM Skill Creator
@@ -45,6 +46,12 @@ resolve these questions (one at a time):
 5. Which other skills should this one call? (grill-me? my-voice? Both?)
 6. Are there reference materials to draw on? (External frameworks, previous
    work, deanpeters' skills library, Notion pages?)
+7. Does this skill need a specific model tier? Default is no annotation
+   (inherits the session model). Recommend `opus` only if the work involves
+   heavy reasoning, multi-source synthesis, or relentless interviewing where
+   a weaker model would materially degrade output. Sub-routine skills
+   (called by other skills) inherit the parent's model and don't need
+   annotation.
 
 Do not proceed to Step 2 until you have clear answers to 1, 2, 3, and 4.
 
@@ -72,6 +79,9 @@ description: >
   [What it does + when to trigger. Be specific and "pushy" — list the
   exact phrases and contexts that should activate this skill. Mention
   related skills it composes with. Err toward over-triggering.]
+# Only include `recommended_model` if Step 1 Q7 says the skill needs a
+# specific tier. Use opus|sonnet|haiku, never specific model IDs.
+recommended_model: opus
 ---
 
 # Skill Title
@@ -111,6 +121,8 @@ Before presenting the draft, check:
 - [ ] If it generates content Darryl will send, does it call my-voice?
 - [ ] Is the description trigger-rich enough?
 - [ ] Is the skill body concise enough to not waste context window?
+- [ ] Is `recommended_model` either set to a clearly-justified tier, or
+      deliberately omitted (sub-routine, or session default is fine)?
 
 ### Step 5: Deliver, install, commit
 
@@ -158,7 +170,10 @@ to push?"*. Only push if he confirms and a remote exists.
 Use the Notion MCP to add a row to the relevant table on the registry
 page (https://www.notion.so/opengov/Darryl-s-Claude-Skills-37d77dbba78880c8857afd54daeea0d3),
 or — if MCP access fails — draft the row in markdown for Darryl to paste.
-The tables currently have three columns: Skill / Purpose / Status.
+The tables have four columns: Skill / Purpose / Status / Recommended Model.
+For the Recommended Model cell: use `Opus`, `Sonnet`, or `Haiku` if the skill
+has `recommended_model` in its frontmatter; otherwise use `—` for sub-routine
+skills, or leave it blank if the session default is fine.
 
 **5f. (Manual, Darryl's call) Claude Chat / Cowork**
 

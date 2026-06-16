@@ -12,6 +12,7 @@ description: >
   critique-strategy, or any skill where Darryl's inputs are ambiguous and you
   need to clarify before proceeding (max 5–6 questions when called as a
   sub-routine).
+recommended_model: opus
 ---
 
 # Grill Me

@@ -21,6 +21,7 @@ description: >
   deep-search (to pull vault state on roadmap, team well-being, and open
   problems for the strategic 40%), and my-voice (over the written plan
   before Notion write).
+recommended_model: opus
 ---
 
 # Plan My Week
