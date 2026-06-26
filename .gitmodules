@@ -1,3 +1,9 @@
 [submodule "skills/frontend-slides"]
 	path = skills/frontend-slides
 	url = https://github.com/zarazhangrui/frontend-slides.git
+[submodule "skills/caveman"]
+	path = skills/caveman
+	url = https://github.com/juliusbrussee/caveman.git
+[submodule "skills/ui-ux-pro-max-skill"]
+	path = skills/ui-ux-pro-max-skill
+	url = https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git
