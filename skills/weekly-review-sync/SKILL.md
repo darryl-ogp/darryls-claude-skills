@@ -32,6 +32,18 @@ Keeps Darryl's Problems-to-Solve and Actions Notion lists current. Built from th
 7. Deliver the draft: if run via the weekly Routine, post it to Slack; if run interactively, show it inline in chat.
 8. Only after Darryl explicitly confirms — in full, or with specific edits — apply the changes: `notion-update-page` for existing rows, `notion-create-pages` for new ones.
 
+## Output format — this is a hard requirement, not a suggestion
+
+The draft you post must be readable in under 2 minutes. Default to almost nothing to report — most weeks should produce a short message.
+
+- **Max ~10 bullet lines total**, plus a one-line opening summary. If you're producing more, you're including things that don't need saying — cut them.
+- **Report changes only.** Never list what's already fine, already correct, or already unchanged (e.g. don't say "all 24 problems pass the 15-word check" — silence on the hard rules means they passed; only speak up if something failed).
+- **One line per item.** No sub-explanations, no restating the rule you're applying, no "here's why this matters."
+- **No status banners or warnings** unless something is actually blocking the run (e.g. a connector is down) — and even then, one line, not a callout with instructions.
+- If there's genuinely nothing to change: say so in one sentence and stop. Don't pad with a summary of what you checked.
+- Open questions (new problems, ambiguous items): max 2, one line each, with your recommended answer inline — don't lay out the full reasoning, that's what `grill-me` follow-up is for if Darryl asks.
+- End with a single line: what you need from Darryl to proceed (confirm / edit / answer the question(s) above).
+
 ## Consult `grill-me` when
 
 The vault or calendar surfaces something ambiguous (e.g. a problem that might be resolved, might not be). Don't guess — ask one focused question with your recommended answer, the way this was done throughout the original planning session.

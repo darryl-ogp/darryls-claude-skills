@@ -36,10 +36,20 @@ Generates Darryl's weekly plan and blocks his calendar. Updated July 2026 with l
 
 1. Pull the four inputs above.
 2. Slot actions into free calendar gaps, highest priority first, sizing each block using the Duration Log (see below).
-3. Draft the week as a table: day / time / duration / type / goal.
+3. Draft the plan — see "Output format" below. Do not create any events yet.
 4. Present the draft. Do not create any events yet.
 5. Once Darryl confirms (or gives specific edits), create the events — see "Creating Events."
 6. Write each block's planned duration into the Duration Log with status `planned`, so `daily-progress-checkin` can log the actual later and close the loop.
+
+## Output format — this is a hard requirement, not a suggestion
+
+The draft must be readable in under 2 minutes.
+
+- **Only propose new blocks.** Never list what's already on the calendar — Darryl can see his own calendar. If most of the week is already covered, say that in one line and move straight to the gaps.
+- **One line per new block**: day, time, duration, one-phrase goal. No table, no "already on calendar" column, no restating the action's full wording from the Actions list.
+- **Max ~10 lines** for the proposed new blocks. If there are more genuine gaps than that, group similar ones (e.g. "3 short CSA/admin items — 30 min each, Fri afternoon") rather than itemizing every one.
+- Skip the Duration Log explanation unless you actually adjusted an estimate based on history — then it's one line, not a paragraph.
+- End with a single line asking what you need: confirm, or what should slip to make room.
 
 ## Creating events
 
