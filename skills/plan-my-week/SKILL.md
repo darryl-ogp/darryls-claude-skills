@@ -1,213 +1,59 @@
 ---
 name: plan-my-week
-description: >
-  Plan Darryl's week as a Monday-morning ritual — prioritise tactical and
-  strategic work, prep for known meetings, and time-block the calendar.
-  Pulls from Google Calendar, Slack, meeting notes in Darryl's Brain vault,
-  high-priority Linear tickets tagged "needs pm", and Darryl's Notion
-  problems list. Produces a 60% tactical / 40% strategic plan, saves it as
-  a new record in the "Weekly Plan" database on Darryl's Working Doc, and
-  on confirmation blocks the Google Calendar with team meetings, focus
-  time on specific tasks, and pre/post-meeting buffer time.
-  Trigger whenever Darryl says: "plan my week", "/plan-my-week", "weekly
-  plan", "what should I focus on this week", "help me prep for the week",
-  "block my calendar", "let's plan the week", "Monday planning", "set up
-  my week", "what's my week looking like", or any phrase signalling a
-  weekly planning ritual or a request to organise his calendar around
-  known commitments. Also trigger when Darryl asks for help prioritising
-  the week ahead.
-  Composes with pm-principles (substrate), grill-me (sub-routine to scope
-  the week — leave, fixed commitments, energy, anything carrying over),
-  deep-search (to pull vault state on roadmap, team well-being, and open
-  problems for the strategic 40%), and my-voice (over the written plan
-  before Notion write).
-recommended_model: opus
+description: ALWAYS use this skill when Darryl asks to "plan my week," "block my calendar," or when running the Monday-morning weekly-plan Routine. Generates a weekly action plan from the prioritised Actions Notion list, current Google Calendar, and the Duration Log database, sizing time blocks against Darryl's actual historical pace rather than guesses. NEVER creates calendar events without Darryl's explicit confirmation of duration and goal for each block first — always draft, confirm, then block.
+recommended_model: Opus
 ---
 
 # Plan My Week
 
-Darryl's Monday-morning planning ritual. Prioritises tactical and
-strategic work, preps known meetings, and time-blocks the calendar.
+Generates Darryl's weekly plan and blocks his calendar. Updated July 2026 with lessons from the July planning session — read this whole file, it supersedes any earlier version.
 
----
+## When this runs
 
-## Before you start
+- **Monday-morning Routine (autonomous):** draft only. Post the draft to Slack for Darryl to review. Never create calendar events from the Routine run itself.
+- **Interactive (after Darryl confirms):** either in reply to the Slack draft, or in a Claude Code / chat session — this is when you actually block the calendar.
 
-Load these skills first:
-- **pm-principles** — substrate for all PM work
-- **grill-me** — clarify scope before pulling data (sub-routine mode)
-- **deep-search** — for the strategic 40% (roadmap, team, problems)
-- **my-voice** — over the written plan before Notion write
+## Inputs to gather, in this order
 
----
+1. **Actions Notion list** — unchecked items, already in priority order.
+2. **Google Calendar** — this week's existing events. Never propose a block that overlaps one.
+3. **Duration Log database** — historical planned-vs-actual time by task category, to size new blocks realistically. If there's no history yet for a category, use the action's own estimate and flag it as unvalidated.
+4. **Darryl's Brain vault** — anything suggesting new urgency or deadlines since the Actions list was last touched. If you find something, flag it — don't silently insert a new action; that's `weekly-review-sync`'s job.
 
-## Workflow
+## Darryl's standing preferences — do not re-ask these each time
 
-### Step 1: Scope the week (grill-me sub-routine)
+- Working hours: 09:45–19:00 Mon–Thu, 09:45–16:00 Fri.
+- Lunch: 16:00–16:30 on Mon, Tue, Wed, Fri. 12:00–12:30 on Thu.
+- Fridays are learning/admin days — never schedule a block involving other people on a Friday.
+- Every block is one of: Focus, Meeting, or 1:1. Never leave it ambiguous.
+- Meetings/1:1s with other people get a 30-min prep buffer before and a 30-min follow-up buffer after.
+  - Exception: several similar sessions run back-to-back (e.g. multiple user-test slots) — one buffer at the start of the run and one at the end is enough. If it's not obvious which pattern applies, ask.
+- Calendar events: **no attendees except darryl_snow@psd.gov.sg**, who is invited to every single event created. Anyone else who needs to attend is named in the title or description for Darryl to invite separately — never add them as an actual attendee.
+- Never use `eventType: FOCUS_TIME` — Google Calendar silently drops attendees on that type. Always use the default event type.
+- Every event description contains real context: what the block is for, why it matters, and a link/reference back to the relevant Notion problem or action where applicable.
 
-Before pulling data, ask 3–5 targeted questions:
+## Process
 
-1. Which week are we planning (start date)? Default: this Monday.
-2. Any leave, OOO, or fixed personal commitments to protect?
-3. Energy / capacity this week — full sprint, recovering, normal?
-4. One thing this week is mostly *about* — push hardest on what?
-5. Anything carrying over from last week that has to land?
+1. Pull the four inputs above.
+2. Slot actions into free calendar gaps, highest priority first, sizing each block using the Duration Log (see below).
+3. Draft the week as a table: day / time / duration / type / goal.
+4. Present the draft. Do not create any events yet.
+5. Once Darryl confirms (or gives specific edits), create the events — see "Creating Events."
+6. Write each block's planned duration into the Duration Log with status `planned`, so `daily-progress-checkin` can log the actual later and close the loop.
 
-Keep it tight. Return control after the answers.
+## Creating events
 
-### Step 2: Pull inputs in parallel
+- One `create_event` call per block.
+- `attendees`: `darryl_snow@psd.gov.sg` only.
+- `description`: plain-language context, plus `To invite: <name/email>` if someone else should be added — Darryl will do that himself.
 
-Make these calls in a single batch:
+## Sizing blocks with the Duration Log
 
-- **Google Calendar** — list events for the week
-  (`mcp__cb9ec73d-*__list_events`)
-- **Slack** — scan DMs, mentions, and CareerSG channel threads needing
-  a response (`mcp__3056e04b-*__slack_search_*`,
-  `mcp__3056e04b-*__slack_read_channel`)
-- **Darryl's Brain vault** — `vault_recent` for fresh meeting notes;
-  invoke **deep-search** for the strategic 40% across roadmap, team
-  well-being, and open problems
-- **Notion "Problems to Solve"** — fetch
-  https://www.notion.so/opengov/Darryl-s-Problems-to-Solve-37d77dbba788807eb7f6c4844247c262
-- **Linear** — if a Linear MCP is connected, query for issues assigned
-  to Darryl with the `needs pm` label, Urgent/High first. Otherwise ask
-  Darryl to paste the list. Respect backlog sortOrder; do not refer to
-  Linear priority fields (they are intentionally unset — see
-  pm-principles).
+- Query the Duration Log for the task's category (e.g. "1:1 prep+meeting+followup", "focus: proposal writing").
+- If the actual-vs-planned ratio has consistently run over or under across 3+ prior instances of that category, adjust the new estimate accordingly rather than reusing the original plan's number.
+- Always tell Darryl explicitly when you've adjusted an estimate based on history — never adjust silently.
 
-### Step 3: Synthesise the plan (60/40 split)
+## Edge cases
 
-Construct a deliberate 60% tactical / 40% strategic split.
-
-**Tactical (60%)** — concrete deliverables this week:
-- Linear `needs pm` tickets (top of backlog first)
-- Slack threads needing a response
-- Meeting prep work that has a real artefact (agenda, doc, decision)
-
-**Strategic (40%)** — split roughly evenly across three lanes:
-- **Roadmap (~13%)** — look-ahead on Now/Next/Later horizons; D&F
-  activities; decisions that unblock the team
-- **Team (~13%)** — 1:1 prep, performance check-ins, well-being signals
-  to watch, unblocking
-- **Problems (~14%)** — pick 1–2 from the Problems to Solve page
-
-For each item, capture:
-- Title
-- Outcome (what done looks like)
-- Estimated effort (S ≤ 1h / M = half-day / L = full day+)
-- Calendar block type (focus / meeting / buffer)
-
-### Step 4: Propose the calendar
-
-Draft a calendar layout for the week:
-- Lock existing meetings in place
-- Add **pre-meeting buffer** (15–30 min) before decision meetings or
-  externally-facing meetings
-- Add **post-meeting buffer** (15–30 min) after meetings that produce
-  follow-ups
-- Block **focus time** for top tactical priorities — 2-hour blocks
-- Protect at least one **deep work block** (≥ 2h) for a strategic item
-- Honour the commitments flagged in Step 1
-
-Output the plan to Darryl as a markdown brief in chat. Do **not** write
-to Notion or create calendar events yet.
-
-### Step 5: Confirm before writing
-
-Ask Darryl explicitly:
-1. Confirm the plan as-is, or edit before saving?
-2. Create the calendar blocks now? (all / selective / none)
-
-Loop on edits until he confirms.
-
-### Step 6: Save to Notion
-
-Run **my-voice** over the plan body first (especially Outcomes and the
-weekly bet — these often drift into project-manager language).
-
-Save as a new record in the **Weekly Plan** database on Darryl's
-Working Doc:
-https://www.notion.so/opengov/Darryl-s-Working-Doc-15177dbba788803085c0dbecf4b67997
-
-**If the database does not yet exist on the Working Doc**, create it
-with this schema and tell Darryl you've initialised it:
-
-| Field | Type | Notes |
-|---|---|---|
-| Week of | Date | Primary; Monday of the week |
-| Bet | Rich text | One-sentence highest-leverage thing |
-| Tactical (60%) | Rich text | Bulleted list with outcomes |
-| Roadmap | Rich text | Strategic lane |
-| Team | Rich text | Strategic lane |
-| Problems | Rich text | Strategic lane |
-| Meeting prep | Rich text | Per-meeting prep work |
-| Calendar plan | Rich text | Markdown summary of blocks |
-| Confirmed | Checkbox | True once calendar blocks are written |
-| Retrospective | Rich text | Filled in at week-end |
-
-### Step 7: Create the calendar blocks
-
-For each block Darryl confirmed in Step 5, call
-`mcp__cb9ec73d-*__create_event`. Conventions:
-
-- **Focus time** — `🎯 Focus: [task]` — default 2h, no attendees
-- **Pre-meeting buffer** — `⏳ Prep: [meeting name]` — 15–30 min, ends
-  at the meeting start
-- **Post-meeting buffer** — `📝 Process: [meeting name]` — 15–30 min,
-  starts at the meeting end
-- **Strategic block** — `🔭 Strategic: [theme]` — ≥ 2h
-- **Team time** — `👥 Team: [person or activity]` — variable
-
-After all events are created, tick **Confirmed** on the Notion record
-and report back to Darryl with a one-line summary (X focus / Y buffer
-/ Z strategic blocks created).
-
----
-
-## Output format (in-chat brief, before any writes)
-
-```
-# Week of [Mon DD MMM]
-
-## This week's bet
-[One sentence — the highest-leverage outcome if everything else slips.]
-
-## Tactical (60%)
-- [item] — [outcome] — [S/M/L] — [block type]
-- ...
-
-## Strategic (40%)
-**Roadmap**
-- ...
-**Team**
-- ...
-**Problems**
-- ...
-
-## Meeting prep
-- [meeting] → [prep work + artefact]
-
-## Proposed calendar
-Mon: [blocks in time order]
-Tue: ...
-Wed: ...
-Thu: ...
-Fri: ...
-
-## Open risks
-- [things that could derail the week]
-```
-
----
-
-## Quality checklist
-
-- [ ] 60/40 split honoured — not 80/20 tactical drift
-- [ ] Strategic 40% touches all three lanes (roadmap, team, problems)
-- [ ] Every item has an outcome, not just a task name
-- [ ] Buffer time protected around decision meetings
-- [ ] At least one ≥ 2h deep work block per day
-- [ ] Nothing written to Notion or Google Calendar without explicit
-      confirmation
-- [ ] Plan reads in Darryl's voice (my-voice run before Notion write)
-- [ ] Linear `priority` field never referenced — sortOrder only
+- If the week has almost no free gaps, say so plainly rather than cramming everything in. Ask which lower-priority items should slip to next week.
+- If two or more problems on the Actions list point to the same underlying action (a known pattern from the original planning session — e.g. one shared reporting artefact covering three problems), don't schedule it twice.
