@@ -8,6 +8,13 @@ recommended_model: Opus
 
 Generates Darryl's weekly plan and blocks his calendar. Updated July 2026 with lessons from the July planning session — read this whole file, it supersedes any earlier version.
 
+## Ordering dependency — read this first
+
+This skill schedules from whatever's *currently* on the Actions Notion list. If `weekly-review-sync` has drafted changes that Darryl hasn't confirmed yet, don't treat this run as final — the Actions list is about to change underneath it.
+
+- If the Monday Routine posts both drafts together: tell Darryl to confirm `weekly-review-sync` first, then re-run `plan-my-week` afterward if that review changed, added, or removed anything material. Don't let him confirm a calendar plan built on a stale Actions list.
+- If run interactively and Darryl hasn't mentioned confirming this week's review yet, ask whether it's been confirmed before treating the plan as final.
+
 ## When this runs
 
 - **Monday-morning Routine (autonomous):** draft only. Post the draft to Slack for Darryl to review. Never create calendar events from the Routine run itself.

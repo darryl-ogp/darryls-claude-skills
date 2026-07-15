@@ -8,6 +8,10 @@ recommended_model: Opus
 
 Keeps Darryl's Problems-to-Solve and Actions Notion lists current. Built from the rules established during the July 2026 problem-consolidation session — read this whole file.
 
+## Ordering dependency — read this first
+
+`plan-my-week` schedules from the current Actions Notion list. If this run changes, adds, or removes any actions, tell Darryl to confirm this draft *before* confirming `plan-my-week`'s calendar draft — and flag that `plan-my-week` should be re-run afterward if anything material changed, so it isn't scheduling against a stale list.
+
 ## Darryl's hard rules — violating any of these is a failed run
 
 - **Problem statements**: contextualized issues, never a solution in disguise. 15 words or fewer.
