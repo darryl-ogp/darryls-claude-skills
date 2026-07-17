@@ -30,7 +30,10 @@ This skill schedules from whatever's *currently* on the Actions Notion list. If 
 ## Darryl's standing preferences — do not re-ask these each time
 
 - Working hours: 09:45–19:00 Mon–Thu, 09:45–16:00 Fri.
-- Lunch: 16:00–16:30 on Mon, Tue, Wed, Fri. 12:00–12:30 on Thu.
+- Lunch — book these as actual "Out of Office" calendar events every week, not just protected time:
+  - Mon, Tue, Wed: 15:30–16:00 (30 min).
+  - Thu: 12:30–13:30 (1 hour).
+  - Fri: 12:00–13:00 (1 hour).
 - Fridays are learning/admin days — never schedule a block involving other people on a Friday.
 - Every block is one of: Focus, Meeting, or 1:1. Never leave it ambiguous.
 - Meetings/1:1s with other people get a 30-min prep buffer before and a 30-min follow-up buffer after.
@@ -42,10 +45,10 @@ This skill schedules from whatever's *currently* on the Actions Notion list. If 
 ## Process
 
 1. Pull the four inputs above.
-2. Slot actions into free calendar gaps, highest priority first, sizing each block using the Duration Log (see below).
-3. Draft the plan — see "Output format" below. Do not create any events yet.
-4. Present the draft. Do not create any events yet.
-5. Once Darryl confirms (or gives specific edits), create the events — see "Creating Events."
+2. Include this week's lunch Out-of-Office blocks in the draft automatically (see standing preferences) — don't ask whether to include them, they're fixed. Mention them in one line, not a discussion point.
+3. Slot actions into the remaining free calendar gaps, highest priority first, sizing each block using the Duration Log (see below).
+4. Draft the plan — see "Output format" below. Do not create any events yet, including the lunch blocks.
+5. Once Darryl confirms (or gives specific edits), create everything — the lunch Out-of-Office events plus the confirmed action blocks. See "Creating Events."
 6. Write each block's planned duration into the Duration Log with status `planned`, so `daily-progress-checkin` can log the actual later and close the loop.
 
 ## Output format — this is a hard requirement, not a suggestion
@@ -61,6 +64,7 @@ The draft must be readable in under 2 minutes.
 ## Creating events
 
 - One `create_event` call per block.
+- Lunch blocks: use `eventType: outOfOffice` if the calendar tool supports it; otherwise a plain default-type event titled "Lunch (OOO)" — either way, no attendees, since it's not a meeting.
 - `attendees`: `darryl_snow@psd.gov.sg` only.
 - `description`: plain-language context, plus `To invite: <name/email>` if someone else should be added — Darryl will do that himself.
 
