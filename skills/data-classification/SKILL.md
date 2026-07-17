@@ -1,6 +1,7 @@
 ---
 name: data-classification
 description: Classify a data point (e.g. a document, field, or piece of information handled in a government/agency context) according to the Singapore Public Sector Data Security Classification and Info Sensitivity framework. Use this skill whenever the user asks "what classification should X be", "how should I classify this data", "is this Restricted/Confidential/Secret", "is this Sensitive Normal/High", or gives you a data point and wants its Security Classification and/or Sensitivity Classification determined. Also use when the user wants to bulk-classify a list of data points, or wants a justification for why a data point is or isn't classified at a given level.
+recommended_model: Sonnet
 ---
 
 # Data Classification (Security & Sensitivity)
