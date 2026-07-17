@@ -10,8 +10,8 @@ A short, factual Slack message, delivered every morning at 9:30am so Darryl has 
 
 ## Process
 
-1. Pull yesterday's calendar events (completed meetings/focus blocks).
-2. Pull the Actions-list items checked off yesterday, and the day's entries in the Duration Log if `daily-progress-checkin` ran.
+1. Pull the Duration Log / Actions-list check-offs from yesterday evening's 6pm check-in (`daily-progress-checkin`) — this should normally have same-day-accurate data on what got done.
+2. If that check-in didn't happen, fall back to yesterday's calendar events (completed meetings/focus blocks) instead.
 3. Pull today's calendar (planned blocks) and the next few unchecked priority Actions.
 4. Compose a short Slack DM:
    - **Yesterday:** 2–4 bullet points — what actually got done, not just what was planned.

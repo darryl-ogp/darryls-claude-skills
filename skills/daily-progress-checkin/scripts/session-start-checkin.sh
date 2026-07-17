@@ -15,3 +15,4 @@ if [ ! -f "$STATE_FILE" ] || [ "$(cat "$STATE_FILE")" != "$TODAY" ]; then
 fi
 
 exit 0
+echo "$(date): SessionStart hook fired" >> /tmp/checkin-hook-debug.log
