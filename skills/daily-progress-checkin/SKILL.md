@@ -24,7 +24,9 @@ Either way, only run the check-in once per day — check the state file before r
 1. Ask, in one message: "What did you get done today, what didn't, and roughly how long did each take?"
 2. Match the answer against today's planned Actions-list items and calendar blocks.
 3. Check off completed items in the Actions Notion list.
-4. For each matched item, log planned vs. actual duration in the Duration Log database.
+4. **Actually write to the Duration Log database** (id: `bbf46a46-8e5f-4846-9470-fa7a8919204e`, under Darryl's Actions page) — one row per task/category via `notion-create-pages`, with `Task Category`, `Actual Minutes`, `date:Date:start` (today), `Status: "actual logged"`, `Source Skill: "daily-progress-checkin"`, and `Related Item` if it maps to a known problem/action.
+   - **This is a real tool call, not a table shown in chat.** Computing and displaying a summary table is not the same as logging it — if you haven't called `notion-create-pages` against this database, the step isn't done, no matter how complete the table you showed looks.
+   - Confirm to Darryl explicitly once done, e.g. "Logged 9 entries to Duration Log" — don't just say "Logged" as a figure of speech.
 5. For anything not completed, ask whether it carries into tomorrow's plan or should be reprioritised. Note it for `plan-my-week`'s next run — don't silently reschedule it yourself.
 6. Run `scripts/mark-checkin-done.sh` to record today's date, so nothing double-prompts later today.
 
