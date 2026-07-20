@@ -21,10 +21,14 @@ Keeps Darryl's Problems-to-Solve and Actions Notion lists current. Built from th
 - If one action already covers multiple problems, cross-reference it from each page rather than duplicating it.
 - Never invent an action that isn't grounded in something Darryl actually said, or a genuine gap found in the vault or calendar — no filler actions.
 
+## Vault resilience
+
+The vault MCP connector (`darryls-brain`) sometimes takes a few seconds to finish connecting. If the first `vault_search` or `vault_recent` call returns an error or empty results unexpectedly, retry up to 3 times with a short pause between each. If it still fails after 3 attempts, note "Vault unavailable this run — context from Notion + Calendar only" in a single line at the top of the draft, then continue without vault input. Never silently skip the vault or pretend it was consulted.
+
 ## Process
 
 1. Fetch the Problems-to-Solve database (all rows, full page content: Impact/Context/Action Plan) and the Actions Notion page.
-2. Fetch Darryl's Brain vault — `vault_recent` for anything new, plus targeted `vault_search` on existing problem topics — to catch new blockers, resolved items, or changed priorities.
+2. Fetch Darryl's Brain vault — `vault_recent` for anything new, plus targeted `vault_search` on existing problem topics — to catch new blockers, resolved items, or changed priorities. See "Vault resilience" above if the connector isn't ready.
 3. Fetch recent and upcoming Google Calendar events for signals: completed meetings that resolved or changed a problem; new commitments implying a new action.
 4. Compare against current Notion state. Identify:
    - New problems not yet tracked.

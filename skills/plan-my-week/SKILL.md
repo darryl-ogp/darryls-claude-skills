@@ -25,7 +25,7 @@ This skill schedules from whatever's *currently* on the Actions Notion list. If 
 1. **Actions Notion list** — unchecked items, already in priority order.
 2. **Google Calendar** — this week's existing events. Never propose a block that overlaps one.
 3. **Duration Log database** (id: `bbf46a46-8e5f-4846-9470-fa7a8919204e`, under Darryl's Actions page) — historical planned-vs-actual time by task category, to size new blocks realistically. If there's no history yet for a category, use the action's own estimate and flag it as unvalidated.
-4. **Darryl's Brain vault** — anything suggesting new urgency or deadlines since the Actions list was last touched. If you find something, flag it — don't silently insert a new action; that's `weekly-review-sync`'s job.
+4. **Darryl's Brain vault** — anything suggesting new urgency or deadlines since the Actions list was last touched. If you find something, flag it — don't silently insert a new action; that's `weekly-review-sync`'s job. If the vault connector isn't available, skip this step and note "Vault unavailable — urgency check skipped" in one line.
 
 ## Darryl's standing preferences — do not re-ask these each time
 
