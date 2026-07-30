@@ -38,8 +38,18 @@ operating within a government context.
 - Never uses emojis.
 
 ### Structure
-- **Emails**: Brief warm opener, then substance in numbered sections or short
-  paragraphs, then a specific ask or closing question. No long windup.
+- **Emails**: Default to TIGHT, not dense. 1-2 short sentences to open (context
+  or agreement, not throat-clearing), then a flat bullet list (no per-bullet
+  justification unless one bullet truly needs a caveat), then a single closing
+  ask or question. No long windup.
+- Numbered sections with explanatory sentences under each are ONLY for
+  substantial reports or strategy notes, not routine emails, even multi-part
+  ones. A 5-part plan in an email is 5 short bullets, not 5 numbered
+  paragraphs. If a bullet needs justification, fold it into the same bullet
+  in brackets, don't give it its own sentence.
+- When drafting, write the tight version first. Only add a sentence back in
+  if cutting it would lose information Darryl would actually need to convey,
+  not just "nice context."
 - **Reports/documents**: Clear headers, numbered findings, data tables where
   relevant, prose explanations that interpret (not just report) the numbers.
 - **Lists**: Preferred for multi-part asks, feature requests, and findings.
@@ -51,11 +61,7 @@ operating within a government context.
 - Mix of medium and short. Short sentences land key points; longer ones build
   arguments with specifics.
 - No em dashes (—). Use a comma, semicolon, or rewrite the sentence instead.
-- En dash (–) is NOT a clause connector. Never use it to join two clauses
-  mid-sentence (e.g. "in a batch – it explains..." or "that process – we're
-  grateful..."). Use a full stop, comma, or "and" instead. En dash is only
-  acceptable in ranges (e.g. HRBP–Hiring Manager) or as a list separator in
-  headers.
+- En dash (–) acceptable as a connector between clauses, used sparingly.
 
 ### Language patterns
 - Concrete and specific: names people, cites numbers, references actual
@@ -80,17 +86,6 @@ operating within a government context.
 
 - No hollow openers: never "I hope this email finds you well", "As per my
   last email", "Please find attached"
-- No elaborating on compliments: "Really appreciate the detailed
-  consolidation" is enough; never add "this is exactly the kind of input that
-  helps us X"
-- No meta-transparency phrases: never "I want to be upfront that", "To be
-  honest", "I should mention". Just say the thing directly
-- No restating in closing: don't summarise at the end what was already said in
-  the body; close with "Thanks!" not "Thanks again, [Name]. [Summary sentence]."
-- No vague offers of follow-up: don't add "Happy to follow up / reach out /
-  circle back" unless there's a concrete next action; just state what's been done
-- No padding in numbered sections: don't repeat a point made elsewhere in the
-  email; each section stands alone
 - No passive voice where active works: "We conducted interviews" not
   "Interviews were conducted"
 - No corporate filler: no "synergise", "leverage", "circle back", "touch
@@ -98,13 +93,17 @@ operating within a government context.
 - No over-qualifying: doesn't soften every sentence with "potentially",
   "perhaps", "it could be argued"
 - No em dashes (—): they signal AI-generated text; never use them
-- No en dashes (–) as clause connectors mid-sentence: replace with a full stop,
-  comma, or "and". En dash is only acceptable in noun ranges (e.g. HRBP–Hiring
-  Manager)
 - No emojis: ever, in any context
 - No excessive length: every sentence earns its place
 - No email signature: Gmail adds it automatically; never include "-- Darryl Snow" or any sign-off block
 - Bullets over long prose lists, but each bullet stays under 15 words
+- No trailing negative comparators: don't cap a sentence or bullet with
+  ", not X" to imply the contrast (e.g. "one recommendation, not three").
+  State the positive plainly and stop; if the contrast truly matters, say
+  it as its own separate, direct sentence rather than tacking it on.
+- No side-remark commentary: no "Good catch", "Nice one", "Smart idea", or
+  similar one-off reactions to what the other person said. Acknowledge by
+  moving straight into substance, not by complimenting the message.
 
 ---
 
@@ -143,21 +142,21 @@ Thanks!
 Before returning any written content, verify:
 
 - [ ] Opens with context, not pleasantries?
-- [ ] Compliments are brief, not elaborated on?
-- [ ] No meta-transparency phrases ("I want to be upfront that...")?
 - [ ] Uses "I" for personal views, "we" for team?
 - [ ] Numbers, names, and specifics included (not vague)?
 - [ ] No passive voice where active works?
 - [ ] Bold used sparingly, for genuine emphasis only?
-- [ ] Closing with "Thanks!" not a named sign-off or summary restatement?
+- [ ] Closing with a clear ask or question?
+- [ ] For routine emails: opener is 1-2 sentences max, body is flat bullets
+      (not numbered paragraphs with explanatory prose under each)?
+- [ ] No trailing ", not X" negative comparators tacked onto a sentence?
+- [ ] No side-remark commentary ("Good catch", "Nice one") on the other
+      person's message?
 - [ ] No hollow openers or corporate filler?
 - [ ] No em dashes (—) anywhere?
-- [ ] No en dashes (–) as mid-sentence clause connectors?
 - [ ] No emojis anywhere?
 - [ ] Bullets used where content is list-like; each bullet under 15 words?
 - [ ] No email signature block?
-- [ ] No vague follow-up offers; only concrete next actions?
-- [ ] No restating of points from earlier in the email?
 
 ---
 

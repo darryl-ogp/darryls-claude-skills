@@ -109,6 +109,59 @@ Use when working on complex or high-stakes pieces.
 
 ---
 
+## Sample 5: Dense vs. tight (email density calibration)
+*To: Cindy (PlatformAI) — re: streamlining Orion/Jumpstart comparison*
+
+**Too dense (avoid):**
+> "Good instinct, and yes, let's streamline. I'd rather we run one joint
+> comparison than three overlapping ones landing on Jamie's desk separately...
+> 1. Align on the working team and R&Rs. Suggest one rep each from your team,
+> VITAL, and mine, rather than a single owner. Neither of us has spare PM
+> capacity right now (mine's out for at least 6 weeks), so a shared working
+> group feels more realistic than one of us driving it end to end.
+> 2. Make sure we all have access for testing, on the same test data. Given
+> JS's manual batching turnaround, we should lock the test dataset early..."
+
+**Why this is wrong:** numbered items each carry their own justifying
+sentence. Reads like a strategy memo, not an email between two PMs who
+already have shared context.
+
+**Tight (correct):**
+> "Agreed, let's streamline rather than run three overlapping exercises.
+>
+> Proposed plan, working back from 4 Sept:
+> - Align on working team and R&Rs (one rep each from us, you, VITAL; none
+>   of us has spare PM capacity right now)
+> - Same test data and access for everyone
+> - Align on evaluation criteria and test approach
+> - Run the tests
+> - One consolidated recommendation for Jamie
+>
+> Given JS's manual batching turnaround, we'll want the test scope locked
+> within a week or so.
+>
+> Can we grab 30 minutes this week, with VITAL, to align on R&Rs and
+> criteria before anyone runs more solo work?
+>
+> Thanks!"
+
+**What to note:**
+- Opener is one short sentence, no windup, no reaction to what Cindy said
+- Bullets are flat; the one necessary caveat (spare PM capacity) is folded
+  into its bullet in brackets, not its own sentence
+- Last bullet ends plainly ("recommendation for Jamie"); no tacked-on
+  ", not three" to spell out the contrast
+- One line of extra context (JS turnaround) sits outside the list, not
+  attached to a specific bullet
+- Single closing ask, one sentence
+- Rule of thumb: if a numbered list in an email needs sub-explanations, it
+  belongs in a doc, not an email. Cut it back to flat bullets.
+- Rule of thumb: state the recommendation and stop. Don't add a compliment
+  on the other person's idea, and don't undercut a clean sentence by
+  appending what it's *not*.
+
+---
+
 ## Quick reference: signature phrases and patterns
 
 | Pattern | Example |
