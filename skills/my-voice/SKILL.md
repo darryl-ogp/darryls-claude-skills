@@ -38,28 +38,44 @@ operating within a government context.
 - Never uses emojis.
 
 ### Structure
-- **Emails**: Default to TIGHT, not dense. 1-2 short sentences to open (context
-  or agreement, not throat-clearing), then a flat bullet list (no per-bullet
-  justification unless one bullet truly needs a caveat), then a single closing
-  ask or question. No long windup.
-- Numbered sections with explanatory sentences under each are ONLY for
-  substantial reports or strategy notes, not routine emails, even multi-part
-  ones. A 5-part plan in an email is 5 short bullets, not 5 numbered
-  paragraphs. If a bullet needs justification, fold it into the same bullet
-  in brackets, don't give it its own sentence.
-- When drafting, write the tight version first. Only add a sentence back in
-  if cutting it would lose information Darryl would actually need to convey,
-  not just "nice context."
+- **Emails**: Brief warm opener, then substance in numbered sections or short
+  paragraphs, then a specific ask or closing question. No long windup.
+- **Opener after a live conversation**: if the email follows a call or
+  in-person chat, anchor to that directly ("summarising thoughts shared
+  just now with a bit more clarity") rather than a colder "on your asks
+  from [day]" recap. Warmer and more accurate to what's actually happening.
+- **Reorganise the original ask, don't mirror it.** If someone sends three
+  numbered asks but two are operationally the same task, merge them and say
+  so implicitly by just answering them together. Rigidly preserving their
+  numbering when it doesn't match the real work is worse than a clean
+  restructure.
 - **Reports/documents**: Clear headers, numbered findings, data tables where
   relevant, prose explanations that interpret (not just report) the numbers.
 - **Lists**: Preferred for multi-part asks, feature requests, and findings.
   Each bullet under 15 words. Prose for things that genuinely flow as prose.
-- **Bold**: Used sparingly for section labels or the single most important
-  qualifier in a section (e.g. **(most critical)**). Not for decoration.
+  Nested sub-numbering (1a, 1b, 1c) is fine for a single ask that branches
+  into several concrete options, especially when comparing effort/tradeoffs.
+- **Bold**: Sparing to the point of often absent entirely in fast internal
+  replies to peers (e.g. Kaijie, the team). Reserve actual bold formatting
+  for polished docs, reports, or DS-facing material where skimmability
+  matters more. Plain numbering alone is often the right amount of structure
+  for a same-day reply.
+- **Level of detail scales with closeness, not seniority.** Peer/operational
+  replies (Kaijie, teammates) can and should go denser than a generic
+  caveat: name the actual people affected (e.g. proposing a specific
+  teammate to cover a gap), link the actual source doc, use the real
+  number and the real date, not a placeholder. Save the more scannable,
+  lighter-touch version for broader stakeholder threads or DS-level updates.
 
 ### Sentence rhythm
 - Mix of medium and short. Short sentences land key points; longer ones build
   arguments with specifics.
+- Comfortable running one dense, comma-chained sentence to lay out a
+  multi-part tradeoff in one breath (e.g. explaining why an integration is
+  expensive, who bears the effort, and what still needs validating before
+  committing). This is a deliberate long sentence carrying real content,
+  not a run-on to tidy up; don't split it into three flat sentences just
+  to shorten it if that loses the connective "because/so/and therefore" logic.
 - No em dashes (—). Use a comma, semicolon, or rewrite the sentence instead.
 - En dash (–) acceptable as a connector between clauses, used sparingly.
 
@@ -70,8 +86,18 @@ operating within a government context.
   "I believe..." Not "It might be worth considering..."
 - Honest qualifiers: "directional at this stage", "probably not the biggest",
   "unclear currently." Used when genuinely uncertain, not as default hedging.
+- **Hedge on estimates, not on positions.** "Probably low engineering effort",
+  "maybe also LTA?" are fine when the underlying fact is genuinely unclear
+  (effort sizing, whether to loop in one more agency). But the actual
+  recommendation or ask stays plain: "I'd rather hold them off" not "we
+  might want to consider holding them off." Two hedges in a row on the same
+  point is a sign to cut one.
 - Closes with a clear ask or question, often framed as a possibility:
   "It would be very helpful to know whether...", "Maybe my team will reach out?"
+  Not every message needs a formal closing question though: a close peer
+  reply can end on a flat statement, with the ask embedded mid-paragraph
+  instead (e.g. a resourcing suggestion phrased as "There could be an
+  opportunity here for [name] to support?" dropped inline, not saved for the end).
 - Uses "we" for team actions; "I" for personal recommendations or views.
 
 ### Punctuation habits
@@ -97,19 +123,13 @@ operating within a government context.
 - No excessive length: every sentence earns its place
 - No email signature: Gmail adds it automatically; never include "-- Darryl Snow" or any sign-off block
 - Bullets over long prose lists, but each bullet stays under 15 words
-- No trailing negative comparators: don't cap a sentence or bullet with
-  ", not X" to imply the contrast (e.g. "one recommendation, not three").
-  State the positive plainly and stop; if the contrast truly matters, say
-  it as its own separate, direct sentence rather than tacking it on.
-- No side-remark commentary: no "Good catch", "Nice one", "Smart idea", or
-  similar one-off reactions to what the other person said. Acknowledge by
-  moving straight into substance, not by complimenting the message.
 
 ---
 
 ## Format by content type
 
 ### External stakeholder email (vendor, partner agency)
+
 ```
 Hi [Name],
 
@@ -143,15 +163,14 @@ Before returning any written content, verify:
 
 - [ ] Opens with context, not pleasantries?
 - [ ] Uses "I" for personal views, "we" for team?
-- [ ] Numbers, names, and specifics included (not vague)?
+- [ ] Numbers, names, and specifics included (not vague), scaled up for
+  peer/operational replies rather than kept generic?
 - [ ] No passive voice where active works?
-- [ ] Bold used sparingly, for genuine emphasis only?
-- [ ] Closing with a clear ask or question?
-- [ ] For routine emails: opener is 1-2 sentences max, body is flat bullets
-      (not numbered paragraphs with explanatory prose under each)?
-- [ ] No trailing ", not X" negative comparators tacked onto a sentence?
-- [ ] No side-remark commentary ("Good catch", "Nice one") on the other
-      person's message?
+- [ ] Bold used sparingly, or dropped entirely for fast peer replies?
+- [ ] Hedges (if any) attach to estimates/facts, not to the actual
+  recommendation or ask?
+- [ ] Closing with a clear ask, a question, or an ask embedded inline
+  where it naturally belongs (doesn't have to be a dedicated final line)?
 - [ ] No hollow openers or corporate filler?
 - [ ] No em dashes (—) anywhere?
 - [ ] No emojis anywhere?
