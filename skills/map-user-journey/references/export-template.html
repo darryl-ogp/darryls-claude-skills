@@ -1,0 +1,100 @@
+<!--
+Portable export template for map-user-journey (Step 5). Same structure
+as swimlane-template.html but with hardcoded light-mode colours — no
+CSS custom properties — so it survives being pasted into Gmail/Docs or
+printed to PDF outside the app (where the app's dark-theme variables
+don't exist and fall back to low-contrast values).
+
+Pipeline:
+  pip install weasyprint --break-system-packages   (first time only)
+  export PATH=$PATH:~/.local/bin
+  weasyprint export.html export.pdf
+  pdftoppm -png -r 100 export.pdf preview           (then Read preview-1.png to verify)
+
+Adapt the same placeholders as swimlane-template.html. Switch
+`@page size` to A4 landscape if the map is short enough to fit;
+start with A3 landscape for 5+ steps.
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>{{Actor A}} &amp; {{Actor B}} — {{Process Name}}</title>
+<style>
+  @page { size: A3 landscape; margin: 14mm; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; background: #ffffff; color: #1a1a1a; }
+  .title { font-weight: 700; font-size: 18px; margin: 0 0 18px; color: #111111; }
+  .grid {
+    display: grid;
+    grid-template-columns: 95px repeat({{N_STEPS}}, 175px);
+    grid-template-rows: repeat({{N_ACTORS}}, auto);
+    column-gap: 34px;
+    row-gap: 26px;
+    align-items: center;
+  }
+  .lane-label { font-weight: 700; font-size: 13px; color: #333333; text-transform: uppercase; letter-spacing: 0.04em; }
+  .box { background: #ffffff; border: 1.75px solid #9aa5b1; border-radius: 10px; padding: 10px 14px; font-size: 12.5px; line-height: 1.45; position: relative; color: #1a1a1a; }
+  /* one accent colour per lane — add more if there are more than two actors */
+  .box.lane-a { border-color: #3f6fb5; }
+  .box.lane-b { border-color: #7a4fb5; }
+  .box.lane-c { border-color: #2f8f5b; }
+  .note { margin-top: 7px; padding-top: 7px; border-top: 1px dashed #9aa5b1; font-size: 11px; font-style: italic; color: #555555; }
+  .badge { position: absolute; top: -10px; left: -10px; width: 21px; height: 21px; border-radius: 50%; background: #c0392b; color: #ffffff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .arrow { position: absolute; right: -27px; font-size: 19px; color: #555555; font-weight: bold; }
+  .arrow.right { top: 50%; transform: translateY(-50%); }
+  .arrow.down-right { top: 55%; transform: translateY(0%); }
+  .arrow.up-right { top: 45%; transform: translateY(-100%); }
+</style>
+</head>
+<body>
+  <div class="title">{{Actor A}} &amp; {{Actor B}} — {{Process Name}}</div>
+  <div class="grid">
+    <div class="lane-label" style="grid-column:1; grid-row:1;">{{ACTOR_A}}</div>
+    <div class="lane-label" style="grid-column:1; grid-row:2;">{{ACTOR_B}}</div>
+
+    <!-- one .box per step; grid-column = chronological position, grid-row = actor's lane, class = lane-a/lane-b/lane-c for border colour -->
+    {{repeat per step}}
+    <div class="box lane-{{a|b|c}}" style="grid-column:{{col}}; grid-row:{{row}};">
+      <span class="badge">{{n}}</span>{{Imperative-verb action, ≤16 words}}
+      {{optional: <div class="note">Note: {{folded system consequence}}</div>}}
+      {{optional: <span class="arrow right|down-right|up-right">{{→|↘|↗}}</span>}}
+    </div>
+    {{end repeat}}
+  </div>
+</body>
+</html>
+
+<!--
+WORKED EXAMPLE — Recruiter & Approver candidate-approval handoff:
+
+<body>
+  <div class="title">Recruiter &amp; Approver — Candidate Approval Handoff</div>
+  <div class="grid">
+    <div class="lane-label" style="grid-column:1; grid-row:1;">Recruiter</div>
+    <div class="lane-label" style="grid-column:1; grid-row:2;">Approver</div>
+
+    <div class="box lane-a" style="grid-column:2; grid-row:1;">
+      <span class="badge">1</span>Update candidate profile: start date, salary, grade, interview panel
+      <span class="arrow right">→</span>
+    </div>
+    <div class="box lane-a" style="grid-column:3; grid-row:1;">
+      <span class="badge">2</span>Move candidate(s) to the Approval stage
+      <span class="arrow down-right">↘</span>
+    </div>
+    <div class="box lane-a" style="grid-column:6; grid-row:1;">
+      <span class="badge">5</span>Receive notification that approval has been received
+    </div>
+
+    <div class="box lane-b" style="grid-column:4; grid-row:2;">
+      <span class="badge">3</span>Receive end-of-day email listing candidates pending approval
+      <span class="arrow right">→</span>
+    </div>
+    <div class="box lane-b" style="grid-column:5; grid-row:2;">
+      <span class="badge">4</span>Click through, approve on dashboard; timestamped comment added to Workable profile
+      <div class="note">Note: candidate auto-moves to Offer stage</div>
+      <span class="arrow up-right">↗</span>
+    </div>
+  </div>
+</body>
+-->

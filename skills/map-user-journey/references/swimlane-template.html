@@ -1,0 +1,105 @@
+<!--
+Swimlane widget template for map-user-journey (mcp__visualize__show_widget).
+Call mcp__visualize__read_me with modules:['diagram'] first.
+
+Shape: one row per actor, columns = chronological order shared across
+ALL rows (not per-row order). Card holds only a numbered badge + one
+imperative-verb sentence. Arrows: '→' within a lane, '↘'/'↗' across
+lanes at a handoff. No emotional curve, no pain/joy scoring.
+
+Placeholders to adapt:
+  {{N_STEPS}}        — total chronological steps (columns)
+  {{ACTOR}}          — lane label
+  grid-column / grid-row on each .sl-box — chronological column, lane row
+  .sl-box.arrow-right / .arrow-down-right / .arrow-up-right — direction
+    to the NEXT step (omit the class entirely on the last step overall)
+  .sl-note — only for a folded system/automatic consequence, inside the
+    card of the human action that triggers it
+
+Worked 5-step, 2-lane example below the placeholders (Recruiter +
+Approver candidate-approval handoff) — copy its structure and swap content.
+-->
+
+<div class="sl-wrap">
+  <style>
+    .sl-wrap { padding: 12px 4px 16px; color: var(--text-primary, #f5f5f5); font-family: var(--font-sans, ui-sans-serif, system-ui, -apple-system, sans-serif); }
+    .sl-title { font-weight: 700; font-size: 16px; margin: 0 0 16px; }
+    .sl-scroll { overflow-x: auto; padding-bottom: 4px; }
+    .sl-grid {
+      display: grid;
+      grid-template-columns: 90px repeat({{N_STEPS}}, auto);
+      grid-template-rows: repeat({{N_ACTORS}}, auto);
+      column-gap: 30px;
+      row-gap: 20px;
+      align-items: center;
+      min-width: max-content;
+    }
+    .sl-label { font-weight: 700; font-size: 13px; color: var(--text-secondary, #ccc); text-transform: uppercase; letter-spacing: 0.04em; }
+    .sl-box {
+      background: var(--surface-elevated, #1f1f1f);
+      border: 1.5px solid var(--border, #444);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 12.5px;
+      line-height: 1.4;
+      position: relative;
+      width: 180px;              /* fixed — do NOT let this stretch to 1fr */
+      justify-self: start;
+    }
+    .sl-note { margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border, #555); font-size: 11px; font-style: italic; color: var(--text-tertiary, #999); }
+    .sl-badge { position: absolute; top: -9px; left: -9px; width: 20px; height: 20px; border-radius: 50%; background: var(--accent, #d24545); color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    .sl-box.arrow-right::after,
+    .sl-box.arrow-down-right::after,
+    .sl-box.arrow-up-right::after {
+      position: absolute;
+      right: -26px;
+      font-size: 18px;
+      color: var(--text-tertiary, #888);
+    }
+    .sl-box.arrow-right::after { content: '→'; top: 50%; transform: translateY(-50%); }
+    .sl-box.arrow-down-right::after { content: '↘'; top: 50%; transform: translateY(0%); }
+    .sl-box.arrow-up-right::after { content: '↗'; top: 50%; transform: translateY(-100%); }
+  </style>
+
+  <h2 class="sl-title">{{Actor A}} &amp; {{Actor B}} — {{Process Name}}</h2>
+
+  <div class="sl-scroll">
+    <div class="sl-grid">
+      <!-- one .sl-label per actor, grid-row matching their lane -->
+      <div class="sl-label" style="grid-column:1; grid-row:1;">{{ACTOR_A}}</div>
+      <div class="sl-label" style="grid-column:1; grid-row:2;">{{ACTOR_B}}</div>
+
+      <!-- one .sl-box per step; grid-column = chronological position (2..N+1), grid-row = actor's lane -->
+      {{repeat per step}}
+      <div class="sl-box {{arrow-right|arrow-down-right|arrow-up-right|}}" style="grid-column:{{col}}; grid-row:{{row}};">
+        <span class="sl-badge">{{n}}</span>{{Imperative-verb action, ≤16 words}}
+        {{optional: <div class="sl-note">Note: {{folded system consequence}}</div>}}
+      </div>
+      {{end repeat}}
+    </div>
+  </div>
+</div>
+
+<!--
+WORKED EXAMPLE — Recruiter & Approver candidate-approval handoff, 5 steps, 2 lanes:
+
+<div class="sl-wrap">
+  <h2 class="sl-title">Recruiter &amp; Approver — Candidate Approval Handoff</h2>
+  <div class="sl-scroll">
+    <div class="sl-grid">
+      <div class="sl-label" style="grid-column:1; grid-row:1;">Recruiter</div>
+      <div class="sl-label" style="grid-column:1; grid-row:2;">Approver</div>
+
+      <div class="sl-box arrow-right" style="grid-column:2; grid-row:1;"><span class="sl-badge">1</span>Update candidate profile: start date, salary, grade, interview panel</div>
+      <div class="sl-box arrow-down-right" style="grid-column:3; grid-row:1;"><span class="sl-badge">2</span>Move candidate(s) to the Approval stage</div>
+      <div class="sl-box" style="grid-column:6; grid-row:1;"><span class="sl-badge">5</span>Receive notification that approval has been received</div>
+
+      <div class="sl-box arrow-right" style="grid-column:4; grid-row:2;"><span class="sl-badge">3</span>Receive end-of-day email listing candidates pending approval</div>
+      <div class="sl-box arrow-up-right" style="grid-column:5; grid-row:2;">
+        <span class="sl-badge">4</span>Click through, approve on dashboard; timestamped comment added to Workable profile
+        <div class="sl-note">Note: candidate auto-moves to Offer stage</div>
+      </div>
+    </div>
+  </div>
+</div>
+-->
