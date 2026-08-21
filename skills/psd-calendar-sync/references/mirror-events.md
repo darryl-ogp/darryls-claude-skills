@@ -22,6 +22,18 @@ Decided with Darryl 2026-08-21: cloud Routine creates mirrors automatically
 each Monday; only an interactive run cleans up stale ones (Routine's
 connector has `create_event` but not `delete_event`).
 
+**PSD-side dependency (critical, 2026-08-21):** Darryl runs a Power Automate
+flow on his PSD machine that auto-accepts invites organized by
+darryl@open.gov.sg and auto-declines everything else with a message asking
+the sender to invite his OGP address instead. Mirror events are organized by
+the `PSD-Darryl` calendar's own address (shown above), NOT
+darryl@open.gov.sg — so without an explicit exception, Power Automate will
+auto-decline every mirror invite. Darryl needs to add the `PSD-Darryl`
+calendar address to that flow's allow-list. This skill can't fix or detect
+this from the Calendar API side (Power Automate runs entirely outside
+Google Calendar) — if mirrors keep showing `responseStatus: declined` when
+checked later, this allow-list is the first thing to check.
+
 ## Marker convention
 
 Every mirror's `description` starts with a machine-parseable line, then a
