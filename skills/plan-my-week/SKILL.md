@@ -26,6 +26,7 @@ This skill schedules from whatever's *currently* on the Actions Notion list. If 
 2. **Google Calendar** — this week's existing events. Never propose a block that overlaps one.
 3. **Duration Log database** (id: `bbf46a46-8e5f-4846-9470-fa7a8919204e`, under Darryl's Actions page) — historical planned-vs-actual time by task category, to size new blocks realistically. If there's no history yet for a category, use the action's own estimate and flag it as unvalidated.
 4. **Darryl's Brain vault** — anything suggesting new urgency or deadlines since the Actions list was last touched. If you find something, flag it — don't silently insert a new action; that's `weekly-review-sync`'s job. If the vault connector isn't available, skip this step and note "Vault unavailable — urgency check skipped" in one line.
+5. **CareerSG page's "Actions for the next 2 weeks" section** — read its current state (don't invoke the full `update-careersg-actions` regeneration every run, that's heavier than this needs). Fold in any item there where Darryl is the owner or a named cover, alongside his personal Actions list. Skip anything already on his personal Actions list (dedupe by task, not exact wording).
 
 ## Darryl's standing preferences — do not re-ask these each time
 
@@ -44,7 +45,7 @@ This skill schedules from whatever's *currently* on the Actions Notion list. If 
 
 ## Process
 
-1. Pull the four inputs above.
+1. Pull the five inputs above.
 2. Include this week's lunch Out-of-Office blocks in the draft automatically (see standing preferences) — don't ask whether to include them, they're fixed. Mention them in one line, not a discussion point.
 3. Slot actions into the remaining free calendar gaps, highest priority first, sizing each block using the Duration Log (see below).
 4. Draft the plan — see "Output format" below. Do not create any events yet, including the lunch blocks.
