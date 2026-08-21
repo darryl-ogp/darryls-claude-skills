@@ -7,9 +7,12 @@ description: >
   invited. Runs weekly Monday morning via a Claude Code Routine. Also trigger
   on "sync my calendars", "sync my PSD calendar", "invite my PSD email to
   everything", "check PSD calendar invites", or any request to keep OGP and
-  PSD calendars aligned. Read-only diagnosis is safe to run any time; the
-  write step (adding attendees) always runs, since it's idempotent — already-
-  invited events are skipped.
+  PSD calendars aligned. For meetings Darryl doesn't organize, creates a
+  personal mirror event on his own calendar (only PSD email invited) instead
+  of a manual-forward request — see references/mirror-events.md. Read-only
+  diagnosis is safe to run any time; the write step (adding attendees or
+  managing mirrors) always runs, since it's idempotent — already-covered
+  events are skipped.
 ---
 
 # PSD Calendar Sync
@@ -41,7 +44,11 @@ darryl_snow@psd.gov.sg added as an attendee if it's missing.
   add the attendee himself (or run the sync from an interactive session,
   which does have `update_event`). Re-check whether `update_event` has
   appeared on the cloud connector next time this runs — this may be a
-  temporary rollout gap rather than a permanent one.
+  temporary rollout gap rather than a permanent one. `create_event` IS
+  available on the cloud connector (confirmed) — `delete_event` is not
+  confirmed there either; check before relying on it for mirror cleanup
+  (step 7). Decided with Darryl 2026-08-21: the cloud Routine creating
+  mirrors it can never clean up is an accepted tradeoff, not a bug.
 - This only ever adds an attendee. It never removes attendees, never deletes
   or cancels events, never changes times. Low blast radius, but still a
   calendar-write action — this skill is pre-authorized to run write actions
@@ -97,10 +104,22 @@ darryl_snow@psd.gov.sg added as an attendee if it's missing.
    - If not editable (Darryl is just a guest on someone else's event with no
      modify permission — including events organized by other psd.gov.sg
      accounts, which don't automatically give his PSD account visibility) →
-     bucket **Needs manual forward**. Don't attempt the write; it'll fail or
-     silently no-op depending on the organizer's guest permissions, and
-     either way it's not Darryl's event to edit.
-7. **Report.** End with the summary below. This is the routine's output —
+     this event goes into the **needs-mirror set** for step 7. Don't attempt
+     `update_event` on it — it'll fail or silently no-op depending on the
+     organizer's guest permissions, and either way it's not Darryl's event
+     to edit.
+7. **Reconcile mirror events.** Full algorithm and field spec in
+   [references/mirror-events.md](references/mirror-events.md) — read it
+   before doing this step the first time. Short version: for every event in
+   the needs-mirror set, ensure a personal `[PSD mirror] ...` event exists
+   on Darryl's own calendar at the same time with only darryl_snow@psd.gov.sg
+   invited; delete+recreate (never patch) any mirror whose source has moved,
+   been cancelled, or been resolved another way; only do the delete half if
+   `delete_event` is actually available (it isn't on the cloud Routine
+   connector today — see the platform-gap note above). Skip any event that's
+   already itself a mirror (description starts with `[psd-calendar-sync
+   mirror]`) — never mirror a mirror.
+8. **Report.** End with the summary below. This is the routine's output —
    no Slack/email notification needed unless Darryl asks for one separately.
 
 ## Output format
@@ -113,8 +132,16 @@ Added (<n>):
 
 Already synced (<n>): (count only, unless Darryl asks for the list)
 
-Needs manual forward (<n> — Darryl isn't the organizer, can't add attendees):
+Mirrors created (<n> — Darryl doesn't organize these, mirrored instead):
 - <event summary> — <date, time range> — organizer: <organizer email>
+
+Mirrors refreshed/removed (<n> — source moved, cancelled, or now covered
+another way):
+- <mirror summary> — <what changed>
+
+Mirrors stale — needs interactive cleanup (<n> — delete_event unavailable
+here, drift detected but not fixed):
+- <mirror summary> — <what's wrong>
 
 Not supported (<n> — Focus Time / Out of Office event types reject attendees,
 Google API limitation, no workaround):
@@ -142,8 +169,10 @@ time already has darryl_snow@psd.gov.sg invited."
 - Recurring events: act on the specific instance(s) returned for the target
   week, not the recurring master — a `(softbook)` or one-off instance this
   week may have different attendees than last week's.
-- "Needs manual forward" bucket must name the organizer so Darryl knows who
-  to ask, or that he should forward the invite himself.
 - Don't retry a `FOCUS_TIME`/`OUT_OF_OFFICE` event through some other
   update-event variant hoping it'll work — it won't; Google's API rejects
   attendees on these event types unconditionally. Report and move on.
+- Mirrors: always delete+recreate on drift, never `update_event` a mirror in
+  place (keeps one code path for every kind of drift — see
+  references/mirror-events.md). Never mirror a mirror. Never skip the
+  delete-availability check before attempting a delete.
