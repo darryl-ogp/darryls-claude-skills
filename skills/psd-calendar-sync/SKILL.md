@@ -27,6 +27,21 @@ darryl_snow@psd.gov.sg added as an attendee if it's missing.
   a cloud Routine, that connector must be attached to the routine — cloud
   routines don't inherit local-session MCP connections. Check
   https://claude.ai/customize/connectors if calls fail with "no such tool."
+- **Known platform gap (confirmed 2026-08-21, first real Routine run):** the
+  Calendar MCP connector attached to cloud Routines currently exposes only
+  `list_events`, `get_event`, `search_events`, `create_event`,
+  `list_calendars`, `suggest_time` — no `update_event`, unlike an
+  interactive Claude Code session's Calendar connector, which has it. This
+  means the weekly cloud Routine can diagnose and report perfectly, but
+  cannot actually write the attendee when it finds an editable event that
+  needs one — that step will error with "no such tool." If that happens,
+  don't improvise a workaround (e.g. deleting and recreating the event via
+  `create_event`, which would drop history/replies and could duplicate it).
+  Just report it under a **Blocked — no write tool** bucket and let Darryl
+  add the attendee himself (or run the sync from an interactive session,
+  which does have `update_event`). Re-check whether `update_event` has
+  appeared on the cloud connector next time this runs — this may be a
+  temporary rollout gap rather than a permanent one.
 - This only ever adds an attendee. It never removes attendees, never deletes
   or cancels events, never changes times. Low blast radius, but still a
   calendar-write action — this skill is pre-authorized to run write actions
@@ -75,7 +90,10 @@ darryl_snow@psd.gov.sg added as an attendee if it's missing.
      `notificationLevel: "EXTERNAL_ONLY"`. (`EXTERNAL_ONLY` sends the invite
      email to the new PSD address — which is what actually makes it appear
      on the PSD side — without re-notifying every internal open.gov.sg
-     attendee that the meeting was "updated.") Bucket **Added**.
+     attendee that the meeting was "updated.") Bucket **Added**. If
+     `update_event` isn't available as a tool at all (the known cloud
+     Routine gap above), don't substitute another call — bucket **Blocked —
+     no write tool** instead and move on.
    - If not editable (Darryl is just a guest on someone else's event with no
      modify permission — including events organized by other psd.gov.sg
      accounts, which don't automatically give his PSD account visibility) →
@@ -100,6 +118,10 @@ Needs manual forward (<n> — Darryl isn't the organizer, can't add attendees):
 
 Not supported (<n> — Focus Time / Out of Office event types reject attendees,
 Google API limitation, no workaround):
+- <event summary> — <date, time range>
+
+Blocked — no write tool (<n> — update_event unavailable on this connector,
+Darryl needs to add these himself or re-run from an interactive session):
 - <event summary> — <date, time range>
 ```
 
