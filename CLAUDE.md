@@ -129,6 +129,7 @@ Backlog of remaining skills, in rough priority order:
 - [ ] `generate-opportunity-solution-tree` — OST from an objective
 
 ### Communication
+- [x] `update-careersg-actions` — refreshes CareerSG's 2-week actions checklist from meeting notes + roadmap/backlog tables, leave-aware owner/date assignment
 - [ ] `write-stakeholder-update` — outcome-oriented stakeholder updates; uses my-voice
 - [ ] `write-user-communication` — user-facing product communications
 - [ ] `counsel-me` — review a list of problems; give actionable advice

@@ -26,6 +26,7 @@ All skills are grounded in:
 | [`prepare-workshop`](skills/prepare-workshop/SKILL.md) | 🧑‍🤝‍🧑 Workshop plans using E→O→F facilitation principle |
 | [`plan-my-week`](skills/plan-my-week/SKILL.md) | 📅 Monday-morning weekly plan — 60/40 tactical/strategic, saves to Notion, blocks the calendar |
 | [`evaluate-candidate`](skills/evaluate-candidate/SKILL.md) | 🧪 Critical OGP PM interview evaluation — A/I/C/V ratings + level rec from a transcript |
+| [`update-careersg-actions`](skills/update-careersg-actions/SKILL.md) | ✅ Refreshes the CareerSG page's 2-week actions checklist from meeting notes + roadmap/backlog tables, with leave-aware owner/date assignment |
 
 Full registry with build status: [Notion skills page](https://www.notion.so/opengov/Darryl-s-Claude-Skills-37d77dbba78880c8857afd54daeea0d3)
 
