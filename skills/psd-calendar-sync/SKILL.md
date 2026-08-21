@@ -30,6 +30,11 @@ darryl_snow@psd.gov.sg added as an attendee if it's missing.
   a cloud Routine, that connector must be attached to the routine — cloud
   routines don't inherit local-session MCP connections. Check
   https://claude.ai/customize/connectors if calls fail with "no such tool."
+- Requires the `PSD-Darryl` secondary calendar to exist (private, created by
+  Darryl 2026-08-21, id in references/mirror-events.md) — mirror events for
+  step 7 live there, never on the primary calendar, so it doesn't clutter
+  Darryl's main view. Same connector/account covers it automatically; no
+  separate connection needed.
 - **Known platform gap (confirmed 2026-08-21, first real Routine run):** the
   Calendar MCP connector attached to cloud Routines currently exposes only
   `list_events`, `get_event`, `search_events`, `create_event`,
@@ -111,14 +116,13 @@ darryl_snow@psd.gov.sg added as an attendee if it's missing.
 7. **Reconcile mirror events.** Full algorithm and field spec in
    [references/mirror-events.md](references/mirror-events.md) — read it
    before doing this step the first time. Short version: for every event in
-   the needs-mirror set, ensure a personal `[PSD mirror] ...` event exists
-   on Darryl's own calendar at the same time with only darryl_snow@psd.gov.sg
-   invited; delete+recreate (never patch) any mirror whose source has moved,
-   been cancelled, or been resolved another way; only do the delete half if
-   `delete_event` is actually available (it isn't on the cloud Routine
-   connector today — see the platform-gap note above). Skip any event that's
-   already itself a mirror (description starts with `[psd-calendar-sync
-   mirror]`) — never mirror a mirror.
+   the needs-mirror set, ensure a `[PSD mirror] ...` event exists on the
+   dedicated `PSD-Darryl` calendar (never the primary) at the same time,
+   with only darryl_snow@psd.gov.sg invited; delete+recreate (never patch)
+   any mirror whose source has moved, been cancelled, or been resolved
+   another way; only do the delete half if `delete_event` is actually
+   available (it isn't on the cloud Routine connector today — see the
+   platform-gap note above).
 8. **Report.** End with the summary below. This is the routine's output —
    no Slack/email notification needed unless Darryl asks for one separately.
 
