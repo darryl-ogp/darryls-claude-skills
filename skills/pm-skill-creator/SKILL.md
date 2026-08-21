@@ -136,18 +136,12 @@ Execute these in order — do not skip and do not batch into a vague
 /Users/darryl/Documents/projects/darryls-claude-skills/skills/[skill-name]/SKILL.md
 ```
 
-**5b. Create the local symlink so the skill is live in Claude Code**
+**5b. Nothing to symlink**
 
-Each skill is symlinked individually — the repo's `skills/` folder is NOT
-a top-level symlink. Run:
-
-```bash
-ln -s /Users/darryl/Documents/projects/darryls-claude-skills/skills/[skill-name] \
-      /Users/darryl/.claude/skills/[skill-name]
-```
-
-After this, the new skill is loaded into every new Claude Code session
-automatically.
+`~/.claude/skills` is a single top-level symlink to this repo's `skills/`
+folder (since 26 Jun 2026). Once the SKILL.md exists at
+`skills/[skill-name]/SKILL.md`, the skill is already live — no `ln -s`
+step, no per-skill symlink.
 
 **5c. Update the in-repo index**
 
