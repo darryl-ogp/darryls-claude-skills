@@ -32,7 +32,9 @@ If the brief is genuinely vague (the user said something like "make me something
 
 ### Phase 2 — Style discovery via Frontend Slides
 
-Invoke `frontend-slides` for the visual generation. Follow its standard 3-preview flow with one calibration: **filter the preview options to the audience's formality.**
+**Default style: `references/style-guide.md`.** Before offering previews, read that file — it's the palette, type, and layout system from Darryl's own reference deck (`references/style-guide-deck.pdf`, his 2026-06-19 Claude sharing deck). Build previews in this style by default rather than generic Frontend Slides templates. Only deviate when the user asks for a different look or the audience/formality genuinely calls for something else (e.g. a context this deck's teal/navy system doesn't fit).
+
+Invoke `frontend-slides` for the visual generation mechanics (fixed 1920×1080 stage, HTML/CSS conventions), but drive the actual palette/type/layout choices from the style guide above rather than its bold template pack. Follow the standard 3-preview flow with one calibration: **filter the preview options to the audience's formality.**
 
 For DS / agency leadership / senior gov: stick to institutional, editorial, or bauhaus aesthetics. Good candidates from the bold template pack: `signal` (navy/cream/gold, institutional), `monochrome` (ivory ledger), `cobalt-grid`, `emerald-editorial`, `blue-professional`. Good safe presets: `Swiss Modern`, `Paper & Ink`, `Vintage Editorial`. Skip anything playful, retro-tech, or neon (no `8-bit-orbit`, `neon-cyber`, `capsule`, etc.) unless the user explicitly asks for something punchier.
 
