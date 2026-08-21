@@ -13,9 +13,9 @@ This skill orchestrates other skills rather than reinventing what they do. It ex
 
 Any request whose output is a visual presentation artifact: a slide, deck, pitch, briefing visual, status one-pager, infographic, or conversion of doc content into slide form. If the user is just asking for text (email, doc, prose), this skill does not apply — that's my-voice alone.
 
-## The five phases
+## The phases
 
-Run these in order. Don't skip Phase 1 even when the brief feels obvious — the clarification questions catch ambiguities that cause expensive iteration later.
+Run these in order. Don't skip Phase 1 even when the brief feels obvious — the clarification questions catch ambiguities that cause expensive iteration later. Phases 2–5 are the default HTML→image path; Phase 5b replaces 2/3/5 entirely when the deliverable needs to be natively editable (see Phase 1's fifth question).
 
 ### Phase 1 — Clarify the brief
 
@@ -29,6 +29,8 @@ Then ask the user the four questions below in a **single batched `AskUserQuestio
 4. **Density.** Dense reading-first (async, has to stand alone) vs punchy speaker-led (live talk, supports narration). Default: reading-first for async leadership, speaker-led for live talks.
 
 If the brief is genuinely vague (the user said something like "make me something for the DS meeting" with no further detail), invoke `anthropic-skills:grill-me` instead of structured questions — interactive grilling is better than four upfront options when the shape isn't clear.
+
+**A fifth question lives outside the batch because most requests don't need it:** ask it only when the user says "editable", "I want to edit this in PowerPoint", "native text", or otherwise signals the image-flat export isn't acceptable. See "Editable native PPTX" under Phase 5 — it's a different build path (python-pptx shapes/tables, not HTML→screenshot), not just an export-format flag, so it's worth knowing before Phase 2/3 rather than after.
 
 ### Phase 2 — Style discovery via Frontend Slides
 
@@ -79,6 +81,16 @@ The PPTX is image-flat — text isn't editable in PowerPoint. That's the right t
 
 For multi-slide decks: extend `scripts/screenshot.mjs` to loop over slide indices, or use frontend-slides' own `export-pdf.sh` for PDF output. The bundled export.sh currently captures slide 1 only.
 
+### Phase 5b — Editable native PPTX (a different build path, not just an export flag)
+
+When the user explicitly wants real, editable text and tables in PowerPoint — "editable", "I want to edit this in PowerPoint", "native text instead of images", or pushback after seeing an image-flat export — **don't** run it through Phase 2/3/5 above. The HTML→screenshot→PNG-in-a-slide pipeline is fundamentally image-flat; there's no way to make its output editable after the fact. Build the deck directly as PowerPoint shapes using `python-pptx` instead:
+
+1. Copy the patterns in `scripts/native_pptx_helpers.py` into a per-deck build script (title/kicker/bullet/table/callout helpers, all Arial-based, all real editable runs). Don't reinvent these from scratch — every function exists because an earlier version of this shipped visibly broken (dead whitespace, overflowing tables, invisible gridlines) and got fixed there.
+2. **Read `references/native-pptx-gotchas.md` before writing any positioning or sizing code.** The two gotchas that will bite you if skipped: a textbox/table-cell `height` is never a clipping bound (content silently overflows past it), and a table's row heights must be set explicitly per row (`row_heights=[...]`) or PowerPoint stretches short rows to fill dead space — this alone caused most of the rework building the reference deck.
+3. Skip the style-guide's custom fonts — native PPTX uses Arial (or another universal system font) throughout, since the user's own PowerPoint won't have Archivo installed. Tell them once that this build is plainer than the styled HTML/PNG version; that's the real tradeoff of "editable," not a defect to fix.
+4. **Verify by rendering, not by reading the source.** After every build and after every sizing/positioning edit: `bash scripts/render_pptx_preview.sh path/to/deck.pptx`. This produces one PNG per slide via headless LibreOffice + Poppler (auto-installed via Homebrew on first run). Actually look at each PNG for overflow, overlap, and dead gaps before telling the user it's done — the source code looking correct is not evidence the render is correct.
+5. Dense, verbatim, high-cardinality tables (e.g. a full roadmap grid copied word-for-word) cannot be both large-font and one-slide. Pick 8-11pt for that one table and say so; don't fight it by overflowing the slide or truncating the content.
+
 ## Composition with other skills
 
 This skill is a coordinator. It explicitly invokes:
@@ -90,14 +102,15 @@ This skill is a coordinator. It explicitly invokes:
 
 ## What this skill does not do
 
-- Multi-slide narrative decks longer than ~5 slides. Frontend Slides alone is better for those — invoke it directly. This skill is optimized for the one-pager / short-deck case that's Darryl's bread and butter.
-- Live editing of `.pptx` files where text needs to remain editable. The export is image-flat by design; if PPT-native editing is the requirement, flag that early in Phase 1 and route to a different approach (likely Google Slides or PPT directly, with the HTML as a visual reference).
+- Multi-slide narrative decks longer than ~5 slides built via the HTML/PNG path. Frontend Slides alone is better for those — invoke it directly. This skill's HTML pipeline is optimized for the one-pager / short-deck case that's Darryl's bread and butter. (Native PPTX decks via Phase 5b don't have this ceiling in the same way — the DS Update reference deck was 9 slides — but each dense table still costs real design/verification effort, so don't default to a 9-slide native deck unless the user's content genuinely needs it.)
 - Generic writing tasks. If there's no visual output, this skill doesn't apply — that's my-voice.
 
 ## Bundled scripts
 
-- `scripts/export.sh` — orchestrator: HTML → PNG + PPTX. Installs deps on first run.
+- `scripts/export.sh` — orchestrator: HTML → PNG + PPTX (image-flat). Installs deps on first run.
 - `scripts/screenshot.mjs` — Playwright screenshot at 1920×1080, deviceScaleFactor 2.
-- `scripts/build-pptx.py` — python-pptx wrapper, embeds PNG(s) as full-bleed slides in a 16:9 deck.
+- `scripts/build-pptx.py` — python-pptx wrapper, embeds PNG(s) as full-bleed slides in a 16:9 deck. This is the image-flat path (Phase 5) — for editable text/tables use `native_pptx_helpers.py` instead (Phase 5b).
+- `scripts/native_pptx_helpers.py` — reusable python-pptx helpers for **editable** decks (real shapes/tables, not screenshots): kicker/title/bullets/table/callout builders, with the row-height and border handling that Phase 5b depends on. A library to copy from, not a CLI — see its own docstring and `references/native-pptx-gotchas.md` before using it.
+- `scripts/render_pptx_preview.sh` — renders every slide of any PPTX to a PNG (LibreOffice + Poppler, auto-installed via Homebrew on first run). The only way to actually see a PPTX's real layout before shipping it; required after every native-PPTX build or sizing edit.
 
 These are designed to be self-contained — they don't depend on anything else in the skills directory.
