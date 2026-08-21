@@ -1,0 +1,127 @@
+---
+name: psd-calendar-sync
+description: >
+  Keep Darryl's PSD calendar (darryl_snow@psd.gov.sg) in sync with his OGP
+  Google Calendar (darryl@open.gov.sg) by ensuring every meeting, focus-time
+  block, and out-of-office block for the coming week has his PSD email
+  invited. Runs weekly Monday morning via a Claude Code Routine. Also trigger
+  on "sync my calendars", "sync my PSD calendar", "invite my PSD email to
+  everything", "check PSD calendar invites", or any request to keep OGP and
+  PSD calendars aligned. Read-only diagnosis is safe to run any time; the
+  write step (adding attendees) always runs, since it's idempotent — already-
+  invited events are skipped.
+---
+
+# PSD Calendar Sync
+
+Darryl holds two roles — OGP (darryl@open.gov.sg, primary working calendar)
+and PSD (darryl_snow@psd.gov.sg, secondary account with no calendar of its
+own). His PSD calendar view is entirely a function of which OGP events invite
+that address. This skill closes the gap weekly: every OGP calendar item that
+should show up on the PSD side — meetings, focus time, out-of-office — gets
+darryl_snow@psd.gov.sg added as an attendee if it's missing.
+
+## Before you start
+
+- Requires the Calendar MCP connector on `darryl@open.gov.sg`. If running as
+  a cloud Routine, that connector must be attached to the routine — cloud
+  routines don't inherit local-session MCP connections. Check
+  https://claude.ai/customize/connectors if calls fail with "no such tool."
+- This only ever adds an attendee. It never removes attendees, never deletes
+  or cancels events, never changes times. Low blast radius, but still a
+  calendar-write action — this skill is pre-authorized to run write actions
+  autonomously as part of the weekly routine (that's the point of the
+  routine); don't ask for confirmation each run.
+
+## Workflow
+
+1. **Resolve the target week.** Monday 00:00 to the following Monday 00:00,
+   `Asia/Singapore`. If run on-demand mid-week, use the current week
+   (Monday of this week through Sunday night) — don't sync past weeks.
+2. **Pull events.** `list_events` on calendar `darryl@open.gov.sg` with that
+   `startTime`/`endTime`, `eventType: [DEFAULT, OUT_OF_OFFICE, FOCUS_TIME]`,
+   `timeZone: Asia/Singapore`, `pageSize: 250`. Page through `nextPageToken`
+   if present. (Deliberately excludes `FROM_GMAIL` and `WORKING_LOCATION` —
+   those aren't "meetings blocked" in the sense Darryl means.) The result can
+   be large — if the tool truncates it to a file, `jq` the fields you need
+   (`id`, `summary`, `start`, `organizer.email`, `organizer.self`,
+   `guestPermissions.guestsCanModify`, `attendees[].email`, `status`) rather
+   than reading the raw JSON.
+3. **Skip cancelled events** (`status: "cancelled"`).
+4. **For each remaining event, check if it's already covered:** either
+   darryl_snow@psd.gov.sg is already an attendee (case-insensitive match
+   against `attendees[].email`), OR the event's `organizer.email` IS
+   darryl_snow@psd.gov.sg (Darryl created it from the PSD side — several of
+   his PSD-originated 1:1s and briefings show up this way, with
+   darryl@open.gov.sg as the invited attendee and no separate PSD attendee
+   entry). Either case → bucket **Already synced**, no action.
+5. **If not yet covered, check the event type first.** Google Calendar's API
+   hard-rejects attendees on `FOCUS_TIME` and `OUT_OF_OFFICE` events —
+   confirmed 2026-08-21: `update_event` returns "The event type does not
+   support adding attendees" for both, organizer permissions notwithstanding.
+   There is no workaround (changing the event type would change how it
+   displays/behaves on the calendar, which is worse than leaving it alone).
+   Bucket these as **Not supported** — don't retry, don't ask Darryl to
+   confirm, just report it. This means "include focus and OOO blocks" is
+   only achievable for the subset of those blocks that are plain `DEFAULT`
+   events (e.g. a "lunch" or "prep" block Darryl created as a normal event
+   rather than a real Focus Time/OOO entry) — true Focus Time/OOO entries
+   can't carry attendees at all, on either side.
+6. **Otherwise, check whether Darryl can add attendees to it:**
+   - Editable if ANY of: `organizer.self === true`, `organizer.email ===
+     "darryl@open.gov.sg"`, or `guestPermissions.guestsCanModify === true`.
+   - If editable → call `update_event` with `calendarId: "darryl@open.gov.sg"`,
+     `eventId`, `addedAttendees: [{email: "darryl_snow@psd.gov.sg"}]`,
+     `notificationLevel: "EXTERNAL_ONLY"`. (`EXTERNAL_ONLY` sends the invite
+     email to the new PSD address — which is what actually makes it appear
+     on the PSD side — without re-notifying every internal open.gov.sg
+     attendee that the meeting was "updated.") Bucket **Added**.
+   - If not editable (Darryl is just a guest on someone else's event with no
+     modify permission — including events organized by other psd.gov.sg
+     accounts, which don't automatically give his PSD account visibility) →
+     bucket **Needs manual forward**. Don't attempt the write; it'll fail or
+     silently no-op depending on the organizer's guest permissions, and
+     either way it's not Darryl's event to edit.
+7. **Report.** End with the summary below. This is the routine's output —
+   no Slack/email notification needed unless Darryl asks for one separately.
+
+## Output format
+
+```
+PSD calendar sync — week of <Mon date>–<Sun date>
+
+Added (<n>):
+- <event summary> — <date, time range>
+
+Already synced (<n>): (count only, unless Darryl asks for the list)
+
+Needs manual forward (<n> — Darryl isn't the organizer, can't add attendees):
+- <event summary> — <date, time range> — organizer: <organizer email>
+
+Not supported (<n> — Focus Time / Out of Office event types reject attendees,
+Google API limitation, no workaround):
+- <event summary> — <date, time range>
+```
+
+If nothing needed action: "Nothing to sync — all of this week's blocked
+time already has darryl_snow@psd.gov.sg invited."
+
+## Quality checklist
+
+- Never touch cancelled events, never remove existing attendees, never
+  change event times/attachments — additive only.
+- Case-insensitive email match before deciding "already synced" — don't
+  double-invite.
+- Treat `organizer.email === "darryl_snow@psd.gov.sg"` as already synced,
+  not as "needs manual forward" — it's already on his PSD calendar because
+  he made it there.
+- Only `darryl@open.gov.sg`'s primary calendar — not resource calendars,
+  not other people's calendars.
+- Recurring events: act on the specific instance(s) returned for the target
+  week, not the recurring master — a `(softbook)` or one-off instance this
+  week may have different attendees than last week's.
+- "Needs manual forward" bucket must name the organizer so Darryl knows who
+  to ask, or that he should forward the invite himself.
+- Don't retry a `FOCUS_TIME`/`OUT_OF_OFFICE` event through some other
+  update-event variant hoping it'll work — it won't; Google's API rejects
+  attendees on these event types unconditionally. Report and move on.
