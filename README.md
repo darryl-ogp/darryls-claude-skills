@@ -28,6 +28,7 @@ All skills are grounded in:
 | [`evaluate-candidate`](skills/evaluate-candidate/SKILL.md) | 🧪 Critical OGP PM interview evaluation — A/I/C/V ratings + level rec from a transcript |
 | [`update-careersg-actions`](skills/update-careersg-actions/SKILL.md) | ✅ Refreshes the CareerSG page's 2-week actions checklist from meeting notes + roadmap/backlog tables, with leave-aware owner/date assignment |
 | [`careersg-decisions-log`](skills/careersg-decisions-log/SKILL.md) | 📒 Pulls roadmap-impacting decisions from the last 2 weeks of CareerSG meeting notes and emails into the CareerSG Decisions Log database on Notion |
+| [`weekly-snippet`](skills/weekly-snippet/SKILL.md) | 📝 Weekly #team-logs snippets draft — multi-source pass (Calendar, Slack, Notion Duration Log, Brain vault), fixed 5-category format, never auto-posts |
 
 Full registry with build status: [Notion skills page](https://www.notion.so/opengov/Darryl-s-Claude-Skills-37d77dbba78880c8857afd54daeea0d3)
 
