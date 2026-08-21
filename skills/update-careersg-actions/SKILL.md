@@ -97,22 +97,35 @@ sources into a single line, using the most specific/recent phrasing.
 Never leave more than one `@mention` as the actor of an action. Use this
 role map (update it here as the team changes):
 
-| Person | Role | Owns |
-|---|---|---|
-| Darryl | PM, all products | DS/stakeholder narrative, roadmap, data governance, cross-cutting calls |
-| Joshua | HR Innovation — agency accounts | PSD, PCG, MDDI, MOM, CSA, MOE, MHA, MAS onboarding & relationship management |
-| Felicia | CHRO Office — agency accounts | Covers/backs up Joshua on agency relationships |
-| Radhika | User Research | Research plans, user testing, research insights delivery |
-| Jing Rong Lim | Engineer — ATS/Harbour + Orion | Also PMs parts of Orion |
-| Jordan Goh | Engineer (intern) — Orion evaluation | Ranking/evaluation methodology |
-| Raylan | Engineer — G17 | Analytics dashboard, admin dashboard |
-| Mark Jeremiah Robert | Product Ops | Training materials, tooling, comms infra. Covers/backs up Alexis Ng |
-| Alexis Ng | Product Ops | Metrics/reporting, ticketing, collateral. Covers/backs up Mark Jeremiah Robert |
-| Lee Koon (Teu Lee Koon) | PSD — NCS/systems liaison | HRPS/Cumulus change requests, SSO, calendaring infra asks |
+| Person | Org | Role | Owns |
+|---|---|---|---|
+| Darryl | OGP | PM, all products | DS/stakeholder narrative, roadmap, data governance, cross-cutting calls |
+| Joshua | PSD | HR Innovation — agency accounts | PSD, PCG, MDDI, MOM, CSA, MOE, MHA, MAS onboarding & relationship management |
+| Felicia | PSD | CHRO Office — agency accounts | Covers/backs up Joshua on agency relationships |
+| Radhika | OGP | User Research | Research plans, user testing, research insights delivery |
+| Jing Rong Lim | OGP | Engineer — ATS/Harbour + Orion | Also PMs parts of Orion |
+| Jordan Goh | OGP | Engineer (intern) — Orion evaluation | Ranking/evaluation methodology |
+| Raylan | OGP | Engineer — G17 | Analytics dashboard, admin dashboard |
+| Mark Jeremiah Robert | OGP | Product Ops | Training materials, tooling, comms infra. Covers/backs up Alexis Ng |
+| Alexis Ng | OGP | Product Ops | Metrics/reporting, ticketing, collateral. Covers/backs up Mark Jeremiah Robert |
+| Lee Koon (Teu Lee Koon) | PSD | NCS/systems liaison | HRPS/Cumulus change requests, SSO, calendaring infra asks |
 
 If a task is genuinely joint, pick whoever is the primary driver — don't
 tag a committee. Resolve each person's Notion `user://` mention ID via
 the Notion "user" search if not already known.
+
+**PSD owners get their first name appended in plain text after the
+mention** — e.g. `@joshua_ong Joshua`. This isn't cosmetic: Notion
+`@mentions` don't reliably notify PSD accounts, so the plain-text name is
+what actually gets read. Source of truth for who counts as PSD is the
+**CareerSG Team Members** database
+(https://app.notion.com/p/opengov/36a77dbba7888091aabefcb01be939da) —
+query it for `Org = 'PSD'` rather than relying on the role map above,
+since the table is what changes as the team does. Its `Name` field is
+always `<given name(s)> <surname>` (surname is the last word) — the
+plain-text suffix is everything except that last word, e.g. "Lee Koon
+Teu" → append "Lee Koon", "Ruei Lynn Lee" → append "Ruei Lynn". OGP
+owners get no suffix, just the bare `@mention`.
 
 ### 5. Assign a date to every action
 
@@ -144,7 +157,7 @@ the Notion "user" search if not already known.
 ### 6. Format each line
 
 ```
-- [ ] <mention-user> <verb, present tense, single owner> <description of the job to be done> – <mention-date> [· [(source)](<meeting-note-url>)]
+- [ ] <mention-user>[ <first name, PSD owners only>] <verb, present tense, single owner> <description of the job to be done> – <mention-date> [· [(source)](<meeting-note-url>)]
 ```
 
 - Verb: simple present tense, direct ("prepares", "confirms", "chases"),
@@ -183,9 +196,9 @@ got dropped and why, and which sources were "best guess."
 ## Output format
 
 A Notion to-do list under `# Actions for the next 2 weeks` on the CareerSG
-page, one line per action, each with exactly one `@owner`, one `@date`,
-and a source link where applicable — plus a short chat summary of what
-changed.
+page, one line per action, each with exactly one `@owner` (plus a plain-text
+first name if that owner is PSD), one `@date`, and a source link where
+applicable — plus a short chat summary of what changed.
 
 ## Quality checklist
 
@@ -194,5 +207,6 @@ changed.
 - [ ] No pure engineering build/fix/deploy/config chore made it onto the list.
 - [ ] No personal, overly abstract, >6-week-out, or already-complete item made it onto the list.
 - [ ] Every meeting-derived line has a `(source)` link; Roadmap/Backlog-derived lines correctly don't.
+- [ ] Every PSD owner (per the CareerSG Team Members database) has their plain-text first name appended after the mention; OGP owners don't.
 - [ ] The disclaimer callout is present at the top of the section.
 - [ ] Darryl's own manual edits since the last run were preserved, not overwritten.
