@@ -5,11 +5,13 @@ description: >
   internal CareerSG team (never external/agency stakeholders) every Monday.
   Pulls the live Notion roadmap + ops tables (with metrics), attributes
   status into a per-table row, pulls pending actions and decisions from
-  Notion, lists next week's CareerSG meetings, and always closes with the
-  team's standing blockers list. Trigger on "draft the weekly update",
-  "weekly update email", "product & ops update email", or the Monday
-  10:06am scheduled-task run. Formerly "roadmap-update-email" (biweekly,
-  draft-only) — this version is weekly and sends directly.
+  Notion, lists next week's CareerSG meetings, and closes with the team's
+  standing blockers list followed by the ats-pilot-feedback-synthesis
+  skill's output. Trigger on "draft the weekly update", "weekly update
+  email", "product & ops update email", or the Monday 10:06am
+  scheduled-task run. Formerly "roadmap-update-email" (biweekly,
+  draft-only) — this version is weekly and sends directly. Composes with
+  ats-pilot-feedback-synthesis (last section of the email).
 ---
 
 # Weekly Update Email
@@ -165,15 +167,27 @@ one. Don't redesign the structure without checking with Darryl first.
     lunch recurring events. List remaining meetings with date, time, and
     title.
 
-12. **Blocked on — always last, always included.** Fetch the "⛔ Blockers"
-    section inline on the CareerSG Notion page verbatim (a short bullet
-    list, not a database) — do not derive or infer this list from the DS
-    Update or other sources. This section is evergreen: include it in
-    every send, unchanged if the underlying Notion list hasn't changed.
-    Place it as the **last section of the email**, after Upcoming
-    meetings.
+12. **Blocked on.** Fetch the "⛔ Blockers" section inline on the CareerSG
+    Notion page verbatim (a short bullet list, not a database) — do not
+    derive or infer this list from the DS Update or other sources. This
+    section is evergreen: include it in every send, unchanged if the
+    underlying Notion list hasn't changed.
 
-13. **Recipients — live from Notion, internal only.** Query the "CareerSG
+13. **ATS Pilot Feedback Synthesis — always last, always included.** Run
+    the `ats-pilot-feedback-synthesis` skill (load it via the Skill tool)
+    and include its output verbatim as its own section, directly below
+    "Blocked on" — this is now the **last section of the email**. That
+    skill already produces anonymised, agency-corroborated,
+    capped-and-ordered output with no methodology/sourcing text — don't
+    re-summarize, re-order, or trim it further here, just drop its list
+    straight into the email under this heading. If a category in its
+    output is empty that week (nothing clears the agency-corroboration
+    bar), it already omits that heading itself — don't add a placeholder
+    for it. If every category is empty, still show the section heading
+    with a one-line "No corroborated feedback themes this week." note,
+    so the section's absence doesn't read as an oversight.
+
+14. **Recipients — live from Notion, internal only.** Query the "CareerSG
     Team Members" data source (`collection://36a77dbb-a788-80ef-8929-000b3596b760`)
     for Name + Email on every run — this is the sole source of truth for
     recipients, per Darryl (2026-08-21). Never substitute or merge in the
@@ -182,7 +196,7 @@ one. Don't redesign the structure without checking with Darryl first.
     list it in the run notes so Darryl can fix the Notion row, and drop
     that person from the send for this run only.
 
-14. **Uncertainty handling.** This is an internal-only send, so incomplete
+15. **Uncertainty handling.** This is an internal-only send, so incomplete
     or uncertain content does not block sending. Wrap anything uncertain —
     an unresolved name, an attribution you're not confident in, a bullet
     you can't independently verify this run — as:
@@ -203,15 +217,15 @@ one. Don't redesign the structure without checking with Darryl first.
     exception to the old skill's "never ship a placeholder" rule — that
     rule applied to external sends; this one doesn't.
 
-15. **Compose and send.** Build the fixed-order HTML (see Structure below)
+16. **Compose and send.** Build the fixed-order HTML (see Structure below)
     and send it directly via the Gmail `send_message` tool to the resolved
-    recipient list from step 13, with `darryl@open.gov.sg` included (he's
+    recipient list from step 14, with `darryl@open.gov.sg` included (he's
     already in the Team Members list, so this is usually automatic). If
-    step 1, 8, 9, 11, or 13 fails outright (a real fetch error, not just a
-    data gap — e.g. Notion API error, empty roadmap table) fall back to
-    `create_draft` instead of sending, and notify Darryl what broke and
-    why. A failed fetch is not the same as an [UNCERTAIN] gap — don't send
-    a broken or empty email.
+    step 1, 8, 9, 11, 13, or 14 fails outright (a real fetch error, not
+    just a data gap — e.g. Notion API error, empty roadmap table) fall
+    back to `create_draft` instead of sending, and notify Darryl what
+    broke and why. A failed fetch is not the same as an [UNCERTAIN] gap —
+    don't send a broken or empty email.
 
 ## Structure (fixed order)
 
@@ -232,7 +246,9 @@ one. Don't redesign the structure without checking with Darryl first.
    Date / Source / DS endorsed? table
 7. **Upcoming meetings** — bulleted list, next 7 days
 8. **Blocked on** — bulleted list, verbatim from the Notion Blockers
-   section, always present, always last
+   section, always present
+9. **ATS Pilot Feedback Synthesis** — verbatim output of the
+   `ats-pilot-feedback-synthesis` skill, always present, always last
 
 No opening throat-clearing sentence — start straight at the roadmap. No
 sign-off/signature block — Darryl's Gmail signature covers that.
@@ -249,8 +265,10 @@ sign-off/signature block — Darryl's Gmail signature covers that.
   hardcoded list that could go stale.
 - Pending actions list is exhaustive (not capped) and sorted soonest-first.
 - Decisions section only covers the completed Mon–Sun week before send day.
-- Blocked on is pulled verbatim from Notion, always included, always the
-  last section — never derived or inferred from other sources.
+- Blocked on is pulled verbatim from Notion, always included — never
+  derived or inferred from other sources.
+- ATS Pilot Feedback Synthesis is the `ats-pilot-feedback-synthesis`
+  skill's output verbatim, always included, always the last section.
 - No descriptive one-liner sentences under section headings — use the
   Notion link line instead where specified.
 - A real fetch failure falls back to a Gmail draft + notification, never a
@@ -267,8 +285,9 @@ sign-off/signature block — Darryl's Gmail signature covers that.
       full checklist, not a truncated sample.
 - [ ] Decisions table only includes last week's completed Mon–Sun window;
       any aside is a table row, not a floating paragraph.
-- [ ] Blocked on section is present, verbatim from Notion, and is the
-      last section in the email.
+- [ ] Blocked on section is present, verbatim from Notion.
+- [ ] ATS Pilot Feedback Synthesis section is present, verbatim from that
+      skill's output, and is the last section in the email.
 - [ ] Recipient list was fetched from Notion this run, not reused from a
       previous send.
 - [ ] The roadmap snapshot file was updated after composing, so next
