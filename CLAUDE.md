@@ -131,6 +131,7 @@ Backlog of remaining skills, in rough priority order:
 ### Communication
 - [x] `update-careersg-actions` — refreshes CareerSG's 2-week actions checklist from meeting notes + roadmap/backlog tables, leave-aware owner/date assignment
 - [x] `careersg-decisions-log` — pulls roadmap-impacting decisions from the last 2 weeks of CareerSG meeting notes and emails, and writes them into the CareerSG Decisions Log database on Notion
+- [x] `ats-pilot-feedback-synthesis` — categorised, anonymised synthesis of ATS Pilot feedback from Notion, agency-corroboration bar, Friday 4pm Slack DM
 - [ ] `write-stakeholder-update` — outcome-oriented stakeholder updates; uses my-voice
 - [ ] `write-user-communication` — user-facing product communications
 - [ ] `counsel-me` — review a list of problems; give actionable advice
