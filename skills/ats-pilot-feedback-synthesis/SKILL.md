@@ -12,10 +12,12 @@ description: >
   "pull the ATS feedback themes", "consolidate pilot feedback",
   "what's the feedback saying", "ATS feedback synthesis", "refresh the
   feedback synthesis", or asks for a summary of what pilot agencies are
-  reporting. Also runs on the Friday 4pm scheduled routine, pushed to
+  reporting. Also runs on the Friday 4pm local scheduled task, pushed to
   Darryl via Slack DM. Composes with pm-principles (substrate) and
   grill-me (only if Darryl asks to change scope/thresholds/format for a
-  one-off run).
+  one-off run). Also composed into weekly-update-email as that email's
+  final section — this skill's output is pasted in verbatim there, so
+  don't change the output format without checking that email's layout.
 ---
 
 # ATS Pilot Feedback Synthesis
@@ -88,6 +90,43 @@ pilot batches/dates) into one insight. Merging across agencies is
 expected and often necessary to clear the frequency bar below — e.g. one
 agency flagging "currency selector is noise, we're always SGD" and
 another flagging "salary can't be fixed as SGD" are the same insight.
+
+**Cluster broadly, by root cause or theme, not just by literal identical
+issue text.** Different symptoms of the same underlying problem are one
+insight, not several — merge them and take the union of agencies across
+every row in the cluster. Examples from real runs:
+
+- "Can't batch-approve candidates" + "can't see which stage of a
+  multi-step approval chain is pending" + "no reminders to hiring
+  team/approvers who haven't acted" are all symptoms of one root cause —
+  the approval workflow lacks the controls a busy approver needs. One
+  insight ("Approval workflow needs batching, visibility, reminders"),
+  agencies = the union across all three rows.
+- "Currency/frequency fields are redundant, we're always SGD" + "can't
+  fix salary as SGD" + "can't select a combined employment type (e.g.
+  fixed-term contract)" are all instances of "Workable's fixed field
+  values don't fit our public-sector setup" — one insight, union of
+  agencies.
+
+A broader, well-chosen theme beats several narrow insights that each
+fail the frequency bar alone but would clear it combined — don't leave
+real signal on the floor by clustering too conservatively.
+
+**Exception — the Workable-limitation override always wins over thematic
+clustering.** If a row is a confirmed Workable technical limit (per the
+override rule in step 1), it must stand as its own **Feedback for
+Workable** insight, even when other rows on the same general topic are
+genuine process/training confusion and get merged into a **Requires user
+training** insight elsewhere. Don't fold a confirmed product defect into
+a broader training-gap cluster just because it shares a theme with
+process-confusion rows — that erases the signal that this one needs
+vendor escalation, not a training doc. It's fine, and expected, for the
+same general topic (e.g. "candidate notification emails") to produce
+*two* separate insights in two different categories this way — a
+Workable-feedback insight for the confirmed limit, and a training-gap
+insight for the genuine confusion — rather than one merged insight that
+loses the distinction. Decided 2026-08-22 after comparing outputs across
+two runs that handled this differently.
 
 ### 3. Apply the frequency bar
 
@@ -175,6 +214,12 @@ DM to just the list — same format rules apply.
 - [ ] No category has more than 3 insights, and none were padded to reach 3
 - [ ] Every insight outside "Other" is backed by >1 distinct agency;
       every "Other" insight is backed by ≥3
+- [ ] Related rows were clustered by root cause/theme (not just literal
+      duplicates) before applying the frequency bar — check for signal
+      left on the floor by over-narrow clustering
+- [ ] No confirmed Workable technical limit got folded into a broader
+      training-gap insight — it stands alone under Feedback for Workable
+      even if related confusion on the same topic is reported elsewhere
 - [ ] "Other" heading is omitted entirely if nothing clears its bar
 - [ ] No individual name, role, or company appears anywhere
 - [ ] No "[IMPACT]" labels — order alone conveys priority
