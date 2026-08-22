@@ -131,15 +131,26 @@ two runs that handled this differently.
 ### 3. Apply the frequency bar
 
 Count the **distinct agencies** (union across all rows in the merged
-insight) behind each insight:
+insight) behind each insight. The bar is **not the same for every
+category**:
 
-- Requires user training / For product team consideration / Feedback for
-  Workable: report only if **more than 1** distinct agency is behind it.
-- Other: report only if **3 or more** distinct agencies are behind it.
+- **Requires user training: 1 or more** distinct agencies — no
+  cross-agency requirement. PSD is by far the longest-running pilot
+  agency and generates the large majority of ops/training-flavoured
+  rows; requiring >1 agency here would leave this category empty most
+  weeks even though PSD alone surfaces plenty of real, actionable
+  training gaps. The asymmetry is deliberate (decided 2026-08-22):
+  training material is cheap and low-risk to write from single-agency
+  signal, unlike a vendor escalation or a product build ask, both of
+  which warrant waiting for independent corroboration first.
+- **For product team consideration / Feedback for Workable: more than
+  1** distinct agency — these need cross-validation before asking the
+  product team to build something or escalating a defect to Workable.
+- **Other: 3 or more** distinct agencies.
 
-Drop everything that doesn't clear its bar. If nothing in "Other" clears
-3 agencies, **omit the Other heading entirely** — don't show an empty
-section.
+Drop everything that doesn't clear its bar. If nothing in "Other" (or
+any category) clears its bar, **omit that heading entirely** — don't
+show an empty section.
 
 ### 4. Cap and order
 
@@ -212,8 +223,9 @@ DM to just the list — same format rules apply.
 ## Quality checklist
 
 - [ ] No category has more than 3 insights, and none were padded to reach 3
-- [ ] Every insight outside "Other" is backed by >1 distinct agency;
-      every "Other" insight is backed by ≥3
+- [ ] Every "Requires user training" insight is backed by ≥1 distinct
+      agency; every "For product team consideration"/"Feedback for
+      Workable" insight by >1; every "Other" insight by ≥3
 - [ ] Related rows were clustered by root cause/theme (not just literal
       duplicates) before applying the frequency bar — check for signal
       left on the floor by over-narrow clustering
