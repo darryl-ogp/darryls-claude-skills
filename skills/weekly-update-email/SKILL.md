@@ -88,14 +88,18 @@ one. Don't redesign the structure without checking with Darryl first.
      **Known risk:** the vault (`darryls-brain`) connector failed with a
      credentials error on the first real scheduled run (2026-08-24, a
      local task's first-ever unattended fire) — plausibly because the
-     "Run now" pre-approval step never happened before Monday, and vault
-     auth doesn't carry over from an interactive session the way the
-     OAuth connectors (Notion/Gmail/Calendar) do. This is exactly what
-     "not just a data gap" fetch failures are for (step 16) — flag it as
-     `[UNCERTAIN]` and skip synthesizing this cell for the run, don't
-     block the send. If it keeps failing after Darryl has run the task
-     interactively at least once, treat it as a standing limitation of
-     the vault connector in headless/scheduled contexts, not a bug to
+     "Run now" pre-approval step never happened before Monday. Note that
+     "Run now" only pre-approves Claude Code's own tool-permission gate —
+     it does nothing for the vault MCP server's own authentication to its
+     backend, which is a separate failure mode. If this cell can't be
+     synthesized because the vault is unreachable, **don't explain why in
+     the email** — that's automation plumbing, not a team update (see
+     step 7). Either omit the cell's content for that run or leave a bare
+     minimal placeholder with no cause given, and put the actual
+     diagnosis (what failed, why, what to check) in the private run notes
+     (step 17) instead. If this keeps failing after Darryl has run the
+     task interactively at least once, treat it as a standing limitation
+     of the vault connector in headless/scheduled contexts, not a bug to
      keep re-diagnosing.
 
 5. **Highlight what's new.** Keep a snapshot of last run's roadmap + ops
@@ -152,10 +156,21 @@ one. Don't redesign the structure without checking with Darryl first.
    unrelated Pending Actions row that used the same mention ID with no
    actual ambiguity in that context.
 
-7. **"Other updates" section** — real, worth-surfacing items that don't
-   attribute cleanly to one roadmap/ops column (staffing, vendor
-   constraints, cross-cutting asks). This replaces the old "What we did"
-   section entirely. No intro sentence — go straight to the bullets.
+7. **"Other updates" section** — real, worth-surfacing **team-facing**
+   items that don't attribute cleanly to one roadmap/ops column
+   (staffing, vendor constraints, cross-cutting asks). This replaces the
+   old "What we did" section entirely. No intro sentence — go straight
+   to the bullets.
+   **This section is never for notes about the automation's own
+   execution.** A real run on 2026-08-24 put "Eugene Tang and Denise Ong
+   have no email on file — dropped from this send" into Other updates,
+   and Darryl called this out: that's a private note to him about
+   fixing a Notion row, not a CareerSG team update, and it has no
+   business in an email the whole team reads. Anything about the run
+   itself — a dropped recipient, a fetch failure, an unresolved mention
+   that needs a Notion fix, a vault/connector error — goes in the
+   private run notes (step 17), never in the email body, never in Other
+   updates specifically.
 
 8. **Pending actions.** Pull the "🎬 Actions for the next 2 weeks"
    checklist block, inline on the CareerSG Notion page. Resolve every
@@ -230,8 +245,11 @@ one. Don't redesign the structure without checking with Darryl first.
     recipients, per Darryl (2026-08-21). Never substitute or merge in the
     "CareerSG Stakeholders" database (that's the external/agency list — out
     of scope for this send). If a row has no Email set, do not guess one;
-    list it in the run notes so Darryl can fix the Notion row, and drop
-    that person from the send for this run only.
+    note it in the **private run notes (step 17)** so Darryl can fix the
+    Notion row, and drop that person from the send for this run only.
+    Never mention a dropped recipient inside the email body itself —
+    that's exactly the automation-plumbing-in-a-team-email mistake step 7
+    warns against.
 
 15. **Uncertainty handling.** This is an internal-only send, so incomplete
     or uncertain content does not block sending. Wrap anything uncertain —
@@ -261,8 +279,22 @@ one. Don't redesign the structure without checking with Darryl first.
     step 1, 8, 9, 11, 13, or 14 fails outright (a real fetch error, not
     just a data gap — e.g. Notion API error, empty roadmap table) fall
     back to `create_draft` instead of sending, and notify Darryl what
-    broke and why. A failed fetch is not the same as an [UNCERTAIN] gap —
-    don't send a broken or empty email.
+    broke and why (private run notes, step 17). A failed fetch is not the
+    same as an [UNCERTAIN] gap — don't send a broken or empty email.
+
+17. **Private run notes — never in the email body.** After sending (or
+    drafting, on fallback), tell Darryl directly — via whatever channel
+    surfaces a scheduled task's own completion output to him, not inside
+    the email — anything about the *run itself*: dropped recipients and
+    why, unresolved mentions that need a Notion fix, connector/fetch
+    failures and what to check, [UNCERTAIN] items worth his attention.
+    This is the only place that content belongs. Decided 2026-08-24 after
+    a real run put a dropped-recipient note into the email's "Other
+    updates" section — Darryl called it out as a private housekeeping
+    note wrongly surfaced to the whole team. The rule going forward: if a
+    sentence is about the automation's own execution rather than
+    CareerSG's actual product/ops state, it's a private run note, never
+    email content.
 
 ## Structure (fixed order)
 
@@ -310,6 +342,9 @@ sign-off/signature block — Darryl's Gmail signature covers that.
   Notion link line instead where specified.
 - A real fetch failure falls back to a Gmail draft + notification, never a
   silent send of broken/empty content.
+- Nothing about the automation's own execution (dropped recipients,
+  connector failures, unresolved mentions needing a Notion fix) ever
+  appears in the email body — that goes in the private run notes only.
 
 ## Quality checklist
 
@@ -332,3 +367,6 @@ sign-off/signature block — Darryl's Gmail signature covers that.
       previous send.
 - [ ] The roadmap snapshot file was updated after composing, so next
       week's NEW badges are accurate.
+- [ ] No sentence in the email is about the automation's own execution —
+      dropped recipients, connector failures, and similar go in the
+      private run notes (step 17) only.
