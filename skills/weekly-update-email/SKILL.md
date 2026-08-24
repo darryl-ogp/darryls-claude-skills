@@ -172,6 +172,22 @@ one. Don't redesign the structure without checking with Darryl first.
    private run notes (step 17), never in the email body, never in Other
    updates specifically.
 
+   **Never blend a name from one source with a fact/date from a
+   different source.** A real run on 2026-08-24 produced "Jordan Goh is
+   on leave 31 Aug–11 Sept" — wrong on both counts. Darryl's own pending
+   action says "prepare handover plan for while **he's** on leave (31
+   Aug–11 Sept)" — that "he" is the action's own owner, Darryl, full
+   stop, not some other person spotted nearby. Separately, a calendar
+   event "Jordan Out" covered only 24 Aug — a same-day OOO, unrelated to
+   Darryl's leave dates. The run merged a name from one source with
+   dates from a different, unrelated source into one confident-sounding
+   but false sentence. When writing an Other-updates bullet, resolve a
+   pronoun ("he/she/they") only to the row's own subject in that same
+   source — never substitute in a name seen elsewhere just because it's
+   also about leave. If two different people are separately on leave,
+   that's two separate bullets, each sourced and verified independently,
+   never merged into one.
+
 8. **Pending actions.** Pull the "🎬 Actions for the next 2 weeks"
    checklist block, inline on the CareerSG Notion page. Resolve every
    owner mention to a name (step 6). Sort by due date ascending (most
