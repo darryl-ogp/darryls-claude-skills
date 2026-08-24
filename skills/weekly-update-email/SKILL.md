@@ -85,6 +85,18 @@ one. Don't redesign the structure without checking with Darryl first.
      Darryl adds an equivalent mention-based row to the Ops table in
      Notion, switch this to transcription too, matching the roadmap
      table's approach.
+     **Known risk:** the vault (`darryls-brain`) connector failed with a
+     credentials error on the first real scheduled run (2026-08-24, a
+     local task's first-ever unattended fire) — plausibly because the
+     "Run now" pre-approval step never happened before Monday, and vault
+     auth doesn't carry over from an interactive session the way the
+     OAuth connectors (Notion/Gmail/Calendar) do. This is exactly what
+     "not just a data gap" fetch failures are for (step 16) — flag it as
+     `[UNCERTAIN]` and skip synthesizing this cell for the run, don't
+     block the send. If it keeps failing after Darryl has run the task
+     interactively at least once, treat it as a standing limitation of
+     the vault connector in headless/scheduled contexts, not a bug to
+     keep re-diagnosing.
 
 5. **Highlight what's new.** Keep a snapshot of last run's roadmap + ops
    table content at
@@ -117,6 +129,29 @@ one. Don't redesign the structure without checking with Darryl first.
    context, that's useful — ask him rather than asserting a guess in the
    email itself.
 
+   **A plain-text name sitting next to a mention chip is a second
+   person, not a conflicting label for the mention.** When Darryl adds a
+   guest's name as plain text (per the workaround above) inside a
+   parenthetical that already contains a resolved mention — e.g.
+   "Supporting PSD (Joshua `<mention→Mark Jeremiah Robert>`)" — that
+   means **two** people are attributed to that line: Joshua *and* Mark.
+   List both, comma-separated. Do not flag this as `[UNCERTAIN]` or treat
+   the plain text as though it's disputing the mention's identity — a
+   real run on 2026-08-24 did this incorrectly (flagged "Mark Jeremiah
+   Robert ⚠️ — Notion labels this mention 'Joshua'" three times), which
+   is wrong: Joshua and Mark are both genuinely listed as co-owners on
+   that line, confirmed by the underlying Notion structure, not two
+   candidate identities for one mention. Only flag uncertainty when a
+   mention's *own* ID fails to resolve — never based on adjacent text.
+
+   **Uncertainty is per-instance, not per-mention-ID.** If a specific
+   mention ID is ambiguous or flagged in one bullet, that does not make
+   every other occurrence of the same ID elsewhere on the page uncertain
+   too — evaluate and resolve each occurrence independently. The same
+   run above incorrectly propagated an `[UNCERTAIN]` flag onto an
+   unrelated Pending Actions row that used the same mention ID with no
+   actual ambiguity in that context.
+
 7. **"Other updates" section** — real, worth-surfacing items that don't
    attribute cleanly to one roadmap/ops column (staffing, vendor
    constraints, cross-cutting asks). This replaces the old "What we did"
@@ -135,7 +170,9 @@ one. Don't redesign the structure without checking with Darryl first.
    Monday–Sunday week (this send is weekly on Monday, so "last week" is
    the 7 days just completed, not a rolling 7-day trailing window from
    today). Header reads "Decisions made last week (<start>–<end>)" with
-   the actual date range. For each row surface: Product, Decision, Date,
+   the actual date range. **Order rows most-recent-first** (decided
+   2026-08-24 — a real run came back oldest-first, which is not the
+   rule). For each row surface: Product, Decision, Date,
    Source (link), and DS endorsed? (show "—" when blank). If something
    outside that window needs surfacing (e.g. a newly-DS-endorsed older
    decision), add it as an **additional row in the same table**, not a
@@ -280,7 +317,10 @@ sign-off/signature block — Darryl's Gmail signature covers that.
       own block-level line, labels bolded), no trimming.
 - [ ] No raw `user://` IDs, no guessed identities presented as fact —
       only confirmed names or `[UNCERTAIN]`.
-- [ ] `[UNCERTAIN]` spans use the full inline style, not a CSS class.
+- [ ] `[UNCERTAIN]`/`NEW` use the ⚠️/🆕 emoji markers, not CSS styling.
+- [ ] No co-listed plain-text name + mention was misread as a naming
+      conflict; no uncertainty flag leaked onto an unrelated instance of
+      the same mention ID elsewhere on the page.
 - [ ] Pending actions table is sorted ascending by date and covers the
       full checklist, not a truncated sample.
 - [ ] Decisions table only includes last week's completed Mon–Sun window;
