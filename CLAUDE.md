@@ -64,6 +64,37 @@ Critical rules encoded there:
 
 ---
 
+## Failure handling — Notion writes
+
+Several skills here (`update-careersg-actions`, `careersg-decisions-log`)
+exist to *edit Notion*. The edit is the deliverable. If it doesn't land,
+the run failed — say so.
+
+**Never substitute.** Do not post a Notion comment, create a replacement
+page, or paste the intended content into chat/Slack and describe the run
+as done. A comment on the CareerSG page is noise for the whole team and
+hides the failure.
+
+**Before concluding the connector can't write:**
+
+1. Notion tools are *deferred* in cloud and Routine sessions — names are
+   listed, schemas are not. They must be loaded before they can be
+   called. Run `ToolSearch` (e.g. `select:mcp__<id>__notion-update-page`,
+   or the keyword query `notion update page`) first. The short tool list
+   visible without this is partial, not the full connector.
+2. Confirm with `notion-get-tool-access`. A healthy account-level Notion
+   connector reports `"update_page": {"status": "available"}` and
+   supports `command: "update_content"` with `old_str`/`new_str`
+   `content_updates` — verified working 2026-09-25.
+3. Only if both of the above genuinely come back without a write tool is
+   this a real finding. Report it with the exact tool names and errors.
+   Don't reach for a third-party MCP server or a workaround.
+
+**After writing, re-fetch the page and confirm the change is there.** A
+tool call that returns without error is not proof the edit landed.
+
+---
+
 ## Skill model routing
 
 Some skills declare `recommended_model: opus|sonnet|haiku` in their YAML frontmatter when the work materially benefits from a specific tier (heavy reasoning, multi-source synthesis, relentless interviewing). Most skills don't declare one and run on the session default.

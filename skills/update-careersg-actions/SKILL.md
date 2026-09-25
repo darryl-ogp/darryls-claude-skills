@@ -41,10 +41,14 @@ one owner, one date, and (where applicable) a source link per action.
 Fetch the CareerSG page (`https://app.notion.com/p/985b113b51b84b839085f56f74350426`)
 in full — not just the Actions section. You need three things from it:
 
-- The **"Actions for the next 2 weeks"** section (what's already there,
-  including any manual edits/removals/reassignments Darryl has made since
-  the last run — these are ground truth and must be preserved unless he's
-  told you otherwise).
+- The **actions** section — currently headed `# 🎬 Actions for the
+  upcoming weeks`. Don't hard-code that string: locate the section by its
+  generated-by-Claude disclaimer callout (step 7) and keep whatever
+  heading is live. Read everything already under it, including any manual
+  edits, removals or reassignments Darryl has made since the last run —
+  those are ground truth and must be preserved unless he says otherwise.
+  Note the product sub-headings in use (step 6) so you write back into
+  the same structure.
 - The **Product Portfolio Roadmap** table ("Happening now" row) — this
   regularly contains real in-flight work that hasn't made it into a
   meeting note yet.
@@ -156,6 +160,24 @@ owners get no suffix, just the bare `@mention`.
 
 ### 6. Format each line
 
+Actions are grouped under product sub-headings, in this order, matching
+what's live on the page:
+
+```
+## ATS
+## Orion
+## G17
+## Jobs Portal
+## Other
+```
+
+Keep every sub-heading even when it has no actions — write `- Nothing`
+under it rather than deleting the heading. `## Other` takes anything
+cross-cutting or non-product (enablement, ways of working, DS-facing
+narrative). Never invent a new sub-heading without Darryl saying so.
+
+Each line under a sub-heading:
+
 ```
 - [ ] <mention-user>[ <first name, PSD owners only>] <verb, present tense, single owner> <description of the job to be done> – <mention-date> [· [(source)](<meeting-note-url>)]
 ```
@@ -182,10 +204,40 @@ along these lines:
 
 ### 8. Write back surgically
 
-Use `notion-update-page` with `update_content` and small, targeted
-`content_updates` (exact old_str → new_str per line) rather than
-replacing the whole block. This preserves anything Darryl has hand-edited
-between runs and avoids accidentally clobbering concurrent changes.
+**Load the write tool before you decide it doesn't exist.** In cloud and
+Routine sessions the Notion tools arrive *deferred* — only their names are
+listed, and the schemas must be fetched before the tools are callable. A
+session that skips this step sees a short, partial Notion tool list and
+wrongly concludes the connector is read/create/comment-only. It is not.
+Before writing:
+
+```
+ToolSearch: select:mcp__<notion-server-id>__notion-update-page
+```
+
+(or, if the server id isn't known, `ToolSearch: "notion update page"`).
+Confirm with `notion-get-tool-access` if in doubt — a healthy connection
+reports `"update_page": {"status": "available"}`.
+
+Then use `notion-update-page` with `command: "update_content"` and small,
+targeted `content_updates` (exact `old_str` → `new_str`, one per line
+changed) rather than `replace_content` on the whole block. This preserves
+anything Darryl has hand-edited between runs and avoids clobbering
+concurrent changes.
+
+- Match `old_str` against a whole checklist line, including its
+  `<mention-user>` / `<mention-date>` markup, so the match is unambiguous.
+- Leave `replace_all_matches` unset (false) — a silent multi-match replace
+  is how manual edits get destroyed.
+- To add a new action, target the line it should follow and rewrite it as
+  itself plus the new line. Don't append blind.
+- Removing an action means replacing its line with the empty string, not
+  rewriting the section.
+
+**If the write fails, fail loudly.** Do not post a Notion comment, do not
+create a new page, do not paste the checklist into chat as a substitute
+and call it done. Report the exact tool name called, the exact error, and
+stop — see *Failure handling — Notion writes* in `CLAUDE.md`.
 
 ### 9. Report back
 
@@ -195,10 +247,15 @@ got dropped and why, and which sources were "best guess."
 
 ## Output format
 
-A Notion to-do list under `# Actions for the next 2 weeks` on the CareerSG
-page, one line per action, each with exactly one `@owner` (plus a plain-text
-first name if that owner is PSD), one `@date`, and a source link where
+A Notion to-do list in the CareerSG page's actions section (live heading:
+`# 🎬 Actions for the upcoming weeks`), grouped under the `## ATS` /
+`## Orion` / `## G17` / `## Jobs Portal` / `## Other` sub-headings, one
+line per action, each with exactly one `@owner` (plus a plain-text first
+name if that owner is PSD), one `@date`, and a source link where
 applicable — plus a short chat summary of what changed.
+
+The deliverable is the edited Notion page. A summary in chat is not the
+deliverable and never substitutes for one.
 
 ## Quality checklist
 
@@ -210,3 +267,5 @@ applicable — plus a short chat summary of what changed.
 - [ ] Every PSD owner (per the CareerSG Team Members database) has their plain-text first name appended after the mention; OGP owners don't.
 - [ ] The disclaimer callout is present at the top of the section.
 - [ ] Darryl's own manual edits since the last run were preserved, not overwritten.
+- [ ] The product sub-headings are intact and in order, with `- Nothing` under any empty one.
+- [ ] The edit actually landed — re-fetch the page after writing and confirm the new text is there. No comment was posted and no substitute page was created.
