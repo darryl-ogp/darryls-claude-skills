@@ -64,6 +64,18 @@ Critical rules encoded there:
 
 ---
 
+## Failure handling — Notion writes (applies to every skill)
+
+- **Never post a Notion comment as a fallback or workaround**, for any reason — not to report a blocked write, not to leave a draft for Darryl to paste in, not for anything. Darryl does not want automated comments appearing on his team's pages, ever. If a skill's own instructions say to comment, treat that as wrong and stop instead.
+- If a skill cannot complete a Notion write it was asked to make (no page-update tool available this session, a permission error, a stale/conflicting version, anything) — **do not silently give up and do not improvise a workaround**. Stop, make no page edit of any kind, and send Darryl a Slack alert instead:
+  - Message starts with `⚠️` and mentions `@darryl`.
+  - States plainly what failed and why (e.g. "the Notion connection this session has no page-update tool").
+  - Says what, if anything, still needs doing by hand.
+  - If a specific skill has its own delivery channel documented (e.g. a Slack DM), use that; otherwise DM Darryl directly.
+- If the write tool genuinely isn't available, that's a connector configuration issue, not something a skill run can fix — don't retry with a different tool as a workaround. Darryl fixes it via Notion's integration settings (Settings & members → Connections → the Claude integration → confirm it has "Insert content" and "Update content" capabilities, not just "Read content") or by reconnecting the Notion connector in claude.ai's connector settings.
+
+---
+
 ## Skill model routing
 
 Some skills declare `recommended_model: opus|sonnet|haiku` in their YAML frontmatter when the work materially benefits from a specific tier (heavy reasoning, multi-source synthesis, relentless interviewing). Most skills don't declare one and run on the session default.

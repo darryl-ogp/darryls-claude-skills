@@ -187,11 +187,24 @@ Use `notion-update-page` with `update_content` and small, targeted
 replacing the whole block. This preserves anything Darryl has hand-edited
 between runs and avoids accidentally clobbering concurrent changes.
 
+**If no page-update tool is available this session** (only create/comment/
+read tools exposed, a permission error, etc.), do not write anywhere on the
+page and do not post a Notion comment as a substitute — see "Failure
+handling — Notion writes" in `CLAUDE.md`. Leave the page untouched and go
+straight to a Slack alert instead of step 9.
+
 ### 9. Report back
 
-Tell Darryl, briefly: what's new, what moved/got reassigned and why
-(especially any leave-driven date shifts or cover reassignments), what
-got dropped and why, and which sources were "best guess."
+If the write succeeded: tell Darryl, briefly, what's new, what moved/got
+reassigned and why (especially any leave-driven date shifts or cover
+reassignments), what got dropped and why, and which sources were "best
+guess."
+
+If the write could not be made (see step 8): send a Slack DM to Darryl
+starting with `⚠️ @darryl`, stating that this run could not update the
+CareerSG actions checklist, why, and that the page was left unchanged. Do
+not include the full draft checklist in Notion in any form; a Slack DM or
+this chat is fine.
 
 ## Output format
 
