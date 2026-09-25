@@ -106,12 +106,15 @@ role map (update it here as the team changes):
 | Darryl | OGP | PM, all products | DS/stakeholder narrative, roadmap, data governance, cross-cutting calls |
 | Joshua | PSD | HR Innovation — agency accounts | PSD, PCG, MDDI, MOM, CSA, MOE, MHA, MAS onboarding & relationship management |
 | Felicia | PSD | CHRO Office — agency accounts | Covers/backs up Joshua on agency relationships |
-| Radhika | OGP | User Research | Research plans, user testing, research insights delivery |
+| Radhika (Radhika Agrawal) | OGP | Design — user research | Research plans, user testing, research insights delivery |
+| Charmaine (Charmaine Lee) | OGP | PM — Orion, Jobs Portal | Orion to general availability; Jobs Portal secondary |
 | Jing Rong Lim | OGP | Engineer — ATS/Harbour + Orion | Also PMs parts of Orion |
 | Jordan Goh | OGP | Engineer (intern) — Orion evaluation | Ranking/evaluation methodology |
-| Raylan | OGP | Engineer — G17 | Analytics dashboard, admin dashboard |
+| Chin Yao Gan | OGP | Engineer — ATS/Harbour, G17, Jobs Portal | G17 analytics/admin dashboards, blacklist + FormSG integration |
 | Mark Jeremiah Robert | OGP | Product Ops | Training materials, tooling, comms infra. Covers/backs up Alexis Ng |
-| Alexis Ng | OGP | Product Ops | Metrics/reporting, ticketing, collateral. Covers/backs up Mark Jeremiah Robert |
+| Alexis Ng | OGP | Product Ops lead | Agency relationships, metrics/reporting, ticketing, collateral. Covers/backs up Mark Jeremiah Robert |
+| Eugene Tang | PSD | PM/Ops — ATS, Orion | Orion alongside Charmaine; ATS account management |
+| Denise Ong | PSD | PM/Ops — ATS, G17 | G17 ops and the ATS integration; ATS account management |
 | Lee Koon (Teu Lee Koon) | PSD | NCS/systems liaison | HRPS/Cumulus change requests, SSO, calendaring infra asks |
 
 If a task is genuinely joint, pick whoever is the primary driver — don't
@@ -130,6 +133,20 @@ always `<given name(s)> <surname>` (surname is the last word) — the
 plain-text suffix is everything except that last word, e.g. "Lee Koon
 Teu" → append "Lee Koon", "Ruei Lynn Lee" → append "Ruei Lynn". OGP
 owners get no suffix, just the bare `@mention`.
+
+Three mention gotchas, verified 2026-09-25:
+
+- **Felicia Tan has no Notion account.** She can't be an `@mention` owner at
+  all. Either write her name in plain text or give the action to Joshua (her
+  cover pairing) — don't silently drop it.
+- **Joshua Ong has two accounts** — `joshuaong@open.gov.sg` and
+  `joshua_ong@psd.gov.sg`. Mention the **OGP** one so the notification
+  actually fires, and still append the plain-text "Joshua" because the Team
+  Members database lists him as PSD.
+- **Eugene Tang and Denise Ong are PSD in the database but hold OGP Notion
+  accounts.** They get the suffix per the rule above; it's redundant for
+  notification purposes but harmless, and the database stays the source of
+  truth.
 
 ### 5. Assign a date to every action
 
